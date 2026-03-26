@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { products } from '../../data/products'
+import { useData } from '../../context/DataContext'
 import ProductCard from '../ui/ProductCard'
 import SearchFilter from '../ui/SearchFilter'
 import { ScrollReveal, StaggerReveal, FadeUp } from '../ui/animations'
 
 export default function FeaturedPerfumes() {
-  const navigate = useNavigate()
-  const [filteredProducts, setFilteredProducts] = useState(products)
+  const { perfumes } = useData()
+  const [filteredProducts, setFilteredProducts] = useState(perfumes)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+
+  // Update filtered products when perfumes change
+  useMemo(() => {
+    setFilteredProducts(perfumes)
+  }, [perfumes])
 
   const handleFilter = (products) => {
     setFilteredProducts(products)
@@ -65,7 +69,7 @@ export default function FeaturedPerfumes() {
         {/* Search & Filter */}
         <ScrollReveal type="fade" delay={0.2}>
           <div className="mb-12">
-            <SearchFilter products={products} onFilter={handleFilter} />
+            <SearchFilter products={perfumes} onFilter={handleFilter} />
           </div>
         </ScrollReveal>
 
@@ -108,7 +112,7 @@ export default function FeaturedPerfumes() {
         <ScrollReveal type="fade" delay={0.3}>
           <div className="text-center mt-16">
             <motion.button
-              onClick={() => navigate('/#featured')}
+              onClick={() => document.getElementById('featured')?.scrollIntoView({ behavior: 'smooth' })}
               className="btn-secondary"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
