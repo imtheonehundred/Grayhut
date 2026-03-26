@@ -202,24 +202,24 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Fixed Position */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2, duration: 0.8 }}
-        className="absolute bottom-8 start-1/2 -translate-x-1/2"
+        className="absolute bottom-6 sm:bottom-8 start-1/2 -translate-x-1/2 flex flex-col items-center"
       >
-        <motion.div
-          animate={{ y: [0, 12, 0] }}
+        <motion.button
+          animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center cursor-pointer"
           onClick={() => scrollToSection('featured')}
+          className="flex flex-col items-center cursor-pointer"
         >
-          <span className="text-xs text-gray-400 tracking-[0.3em] uppercase mb-3">
-            {lang === 'ar' ? 'تمرير' : 'Scroll'}
+          <span className="text-[10px] sm:text-xs text-gray-400 tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-3">
+            {lang === 'ar' ? 'انزل' : 'Scroll'}
           </span>
-          <ChevronDown size={20} className="text-accent" />
-        </motion.div>
+          <ChevronDown size={16} className="text-accent" />
+        </motion.button>
       </motion.div>
 
       {/* Corner Decorations with fade in */}

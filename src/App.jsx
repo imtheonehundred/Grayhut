@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { CartProvider } from './context/CartContext'
 import { AdminProvider } from './context/AdminContext'
 import { DataProvider } from './context/DataContext'
@@ -30,12 +31,23 @@ import OrdersManagement from './components/admin/pages/OrdersManagement'
 import SiteSettings from './components/admin/pages/SiteSettings'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
+// Scroll to top on route change
+function ScrollToTop() {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  return null;
+}
+
 function App() {
   return (
-    <DataProvider>
-      <CartProvider>
-        <AdminProvider>
-          <Routes>
+    <>
+      <ScrollToTop />
+      <DataProvider>
+        <CartProvider>
+          <AdminProvider>
+            <Routes>
             {/* Public Routes */}
             <Route path="/" element={
               <>
@@ -100,6 +112,7 @@ function App() {
         </AdminProvider>
       </CartProvider>
     </DataProvider>
+    </>
   )
 }
 

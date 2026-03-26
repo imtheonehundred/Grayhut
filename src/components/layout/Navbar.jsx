@@ -182,45 +182,49 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 lg:hidden bg-black/90 backdrop-blur-lg"
+            className="fixed inset-0 z-40 lg:hidden bg-black/95 backdrop-blur-lg"
           >
-            <div className={`relative h-full flex flex-col items-center justify-center gap-6 ${dir === 'rtl' ? 'text-end' : 'text-center'}`}>
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <Link
-                    to={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="font-playfair text-2xl text-white hover:text-accent transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </motion.div>
-              ))}
+            {/* Close Button - Only One */}
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`absolute top-6 end-6 z-50 text-white p-2 hover:text-accent transition-colors ${dir === 'rtl' ? 'end-auto start-6' : ''}`}
+            >
+              <X size={28} />
+            </button>
 
-              {/* Language toggle in mobile menu */}
+            {/* Menu Content - Centered */}
+            <div className="relative h-full flex flex-col items-center justify-center px-6">
+              {/* Navigation Links */}
+              <nav className="flex flex-col items-center justify-center gap-5 sm:gap-6">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <Link
+                      to={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      className="font-playfair text-xl sm:text-2xl md:text-3xl text-white hover:text-accent transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {/* Language Toggle */}
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
+                transition={{ delay: navLinks.length * 0.05 + 0.1 }}
                 onClick={toggleLanguage}
-                className="mt-8 flex items-center gap-2 text-accent text-lg"
+                className="mt-10 sm:mt-12 flex items-center gap-2 text-accent text-base sm:text-lg"
               >
                 <Globe size={20} />
                 <span>{lang === 'ar' ? 'English' : 'العربية'}</span>
               </motion.button>
-
-              {/* Close button */}
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-6 end-6 text-white p-2"
-              >
-                <X size={28} />
-              </button>
             </div>
           </motion.div>
         )}

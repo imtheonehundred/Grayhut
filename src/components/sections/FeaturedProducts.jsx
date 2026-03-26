@@ -31,18 +31,18 @@ export default function FeaturedProducts() {
   };
 
   return (
-    <section id="featured" className="py-24 lg:py-32 px-4 md:px-6 lg:px-12 bg-background">
+    <section id="featured" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-12 bg-background">
       <div className="max-w-7xl mx-auto">
         {/* Section Header - Cinematic Reveal */}
-        <ScrollReveal type="blur" className="text-center mb-16">
+        <ScrollReveal type="blur" className="text-center mb-10 sm:mb-16">
           <FadeUp blur delay={0}>
-            <p className="text-accent tracking-[0.3em] uppercase text-xs md:text-sm mb-4">
+            <p className="text-accent tracking-[0.3em] uppercase text-xs sm:text-sm mb-4">
               {t('heroPreTitle', lang)}
             </p>
           </FadeUp>
 
           <FadeUp blur delay={0.15}>
-            <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+            <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-4 sm:mb-6">
               <span className="gold-text">{t('heroTitle1', lang)}</span>{' '}
               <span className="text-white">{t('heroTitle2', lang)}</span>
             </h2>
@@ -51,7 +51,7 @@ export default function FeaturedProducts() {
           <FadeUp blur delay={0.3}>
             <div className="flex items-center justify-center gap-4">
               <motion.div
-                className="w-12 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-accent"
+                className="w-8 sm:w-12 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-accent"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -65,7 +65,7 @@ export default function FeaturedProducts() {
                 transition={{ duration: 0.5, delay: 0.6 }}
               />
               <motion.div
-                className="w-12 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-accent"
+                className="w-8 sm:w-12 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-accent"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -77,13 +77,13 @@ export default function FeaturedProducts() {
 
         {/* Search & Filter */}
         <ScrollReveal type="fade" delay={0.2}>
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <SearchFilter products={perfumes} onFilter={handleFilter} />
           </div>
         </ScrollReveal>
 
-        {/* Products Grid with Stagger Animation */}
-        <StaggerReveal direction="up" stagger={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Products Grid - Mobile 1 column, proper spacing */}
+        <StaggerReveal direction="up" stagger={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
@@ -106,9 +106,9 @@ export default function FeaturedProducts() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20"
+            className="text-center py-16 sm:py-20"
           >
-            <p className="text-gray-400 font-playfair text-xl">
+            <p className="text-gray-400 font-playfair text-lg sm:text-xl">
               {t('noProducts', lang)}
             </p>
           </motion.div>
@@ -116,7 +116,7 @@ export default function FeaturedProducts() {
 
         {/* View All Button */}
         <ScrollReveal type="fade" delay={0.3}>
-          <div className="text-center mt-16">
+          <div className="text-center mt-10 sm:mt-16">
             <motion.button
               onClick={viewAllProducts}
               className="btn-secondary"

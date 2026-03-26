@@ -37,8 +37,8 @@ export default function ProductCard({ product, index = 0 }) {
             : 'shadow-lg'
         }`}
       >
-        {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden">
+        {/* Image Container - Mobile Responsive */}
+        <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
           <motion.img
             src={product.image}
             alt={product.name}
@@ -113,30 +113,30 @@ export default function ProductCard({ product, index = 0 }) {
           </motion.div>
         </div>
 
-        {/* Product Info */}
-        <div className="p-6">
+        {/* Product Info - Mobile Responsive */}
+        <div className="p-4 sm:p-6">
           {/* Brand */}
-          <p className="text-xs text-gray-500 tracking-widest uppercase mb-1">
+          <p className="text-[10px] sm:text-xs text-gray-500 tracking-widest uppercase mb-1">
             {product.brand}
           </p>
 
           {/* Name */}
-          <h3 className="font-playfair text-xl font-semibold text-white mb-2 group-hover:text-accent transition-colors">
+          <h3 className="font-playfair text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2 group-hover:text-accent transition-colors truncate">
             {product.name}
           </h3>
 
           {/* Description */}
-          <p className="text-xs text-gray-400 mb-4 line-clamp-2">
+          <p className="text-xs text-gray-400 mb-3 sm:mb-4 line-clamp-2">
             {product.description}
           </p>
 
           {/* Price */}
-          <div className="flex items-center gap-3">
-            <span className="gold-text font-semibold text-lg">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="gold-text font-semibold text-base sm:text-lg">
               {formatPriceIQD(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-gray-500 line-through text-sm">
+              <span className="text-gray-500 line-through text-xs sm:text-sm">
                 {formatPriceIQD(product.originalPrice)}
               </span>
             )}
