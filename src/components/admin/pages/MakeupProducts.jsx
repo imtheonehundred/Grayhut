@@ -161,12 +161,12 @@ export default function MakeupProducts() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="bg-surface border border-white/5 overflow-hidden rounded-xl"
+            className="group bg-surface border border-white/5 overflow-hidden rounded-xl"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] overflow-hidden">
               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center gap-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(item)}
                   className="p-2.5 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-colors"

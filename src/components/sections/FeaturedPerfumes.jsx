@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
@@ -8,6 +9,7 @@ import SearchFilter from '../ui/SearchFilter'
 import { ScrollReveal, StaggerReveal, FadeUp } from '../ui/animations'
 
 export default function FeaturedPerfumes() {
+  const navigate = useNavigate()
   const [filteredProducts, setFilteredProducts] = useState(products)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -106,6 +108,7 @@ export default function FeaturedPerfumes() {
         <ScrollReveal type="fade" delay={0.3}>
           <div className="text-center mt-16">
             <motion.button
+              onClick={() => navigate('/#featured')}
               className="btn-secondary"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
