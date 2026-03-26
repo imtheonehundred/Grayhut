@@ -24,6 +24,8 @@ export const translations = {
 
     // Categories
     categoriesTitle: 'الفئات',
+    exploreProducts: 'اكتشف منتجاتنا',
+    shopAndMore: 'والتسوق',
     allProducts: 'جميع المنتجات',
     newArrivals: 'جديد',
     bestSellers: 'الأكثر مبيعاً',
@@ -89,6 +91,7 @@ export const translations = {
 
     // Special Offer
     specialOffers: 'عروض خاصة',
+    shopAllOffers: 'تسوق كل العروض',
     limitedTime: 'لفترة محدودة',
     days: 'أيام',
     hours: 'ساعات',
@@ -162,6 +165,8 @@ export const translations = {
 
     // Categories
     categoriesTitle: 'Categories',
+    exploreProducts: 'Explore Our Products',
+    shopAndMore: '& More',
     allProducts: 'All Products',
     newArrivals: 'New Arrivals',
     bestSellers: 'Best Sellers',
@@ -227,6 +232,7 @@ export const translations = {
 
     // Special Offer
     specialOffers: 'Special Offers',
+    shopAllOffers: 'Shop All Offers',
     limitedTime: 'Limited Time',
     days: 'Days',
     hours: 'Hours',

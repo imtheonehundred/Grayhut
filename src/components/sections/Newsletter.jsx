@@ -79,7 +79,7 @@ export default function Newsletter() {
           {/* Form */}
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="relative max-w-lg mx-auto">
-              <div className={`flex flex-col sm:flex-row gap-4 ${lang === 'ar' ? 'rtl' : 'ltr'}`}>
+              <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
                   <input
                     type="email"

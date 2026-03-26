@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
@@ -8,6 +9,7 @@ import SearchFilter from '../ui/SearchFilter';
 import { ScrollReveal, StaggerReveal, FadeUp } from '../ui/animations';
 
 export default function FeaturedProducts() {
+  const navigate = useNavigate();
   const { perfumes } = useData();
   const { lang, dir } = useLanguage();
   const [filteredProducts, setFilteredProducts] = useState(perfumes);
@@ -20,8 +22,12 @@ export default function FeaturedProducts() {
     setFilteredProducts(products);
   };
 
-  const scrollToFeatured = () => {
-    document.getElementById('featured')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToCategories = () => {
+    document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const viewAllProducts = () => {
+    navigate('/category/all');
   };
 
   return (
@@ -112,7 +118,7 @@ export default function FeaturedProducts() {
         <ScrollReveal type="fade" delay={0.3}>
           <div className="text-center mt-16">
             <motion.button
-              onClick={scrollToFeatured}
+              onClick={viewAllProducts}
               className="btn-secondary"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

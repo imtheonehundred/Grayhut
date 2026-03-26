@@ -4,17 +4,27 @@ const LanguageContext = createContext()
 
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState(() => {
-    const saved = localStorage.getItem('grayhut-lang')
-    return saved || 'ar'
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('grayhut-lang')
+      return saved || 'ar'
+    }
+    return 'ar'
   })
 
-  const [dir, setDir] = useState(lang === 'ar' ? 'rtl' : 'ltr')
+  const [dir, setDir] = useState('rtl')
 
   useEffect(() => {
-    localStorage.setItem('grayhut-lang', lang)
-    setDir(lang === 'ar' ? 'rtl' : 'ltr')
-    document.documentElement.lang = lang
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+    const newDir = lang === 'ar' ? 'rtl' : 'ltr'
+    setDir(newDir)
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang
+      document.documentElement.dir = newDir
+      document.body.style.direction = newDir
+      document.body.setAttribute('dir', newDir)
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('grayhut-lang', lang)
+    }
   }, [lang])
 
   const toggleLanguage = () => {

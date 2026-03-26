@@ -71,8 +71,11 @@ export default function SpecialOffer() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-16"
         >
-          <button className="btn-primary">
-            {lang === 'ar' ? 'تسوق كل العروض' : 'Shop All Offers'}
+          <button
+            onClick={() => document.getElementById('offer')?.scrollIntoView({ behavior: 'smooth' })}
+            className="btn-primary"
+          >
+            {t('shopAllOffers', lang)}
           </button>
         </motion.div>
       </div>

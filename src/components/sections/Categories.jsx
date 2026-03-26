@@ -20,12 +20,12 @@ export default function Categories() {
         >
           {/* Label */}
           <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            {lang === 'ar' ? 'اكتشف منتجاتنا' : 'Explore Our Products'}
+            {t('exploreProducts', lang)}
           </p>
 
           {/* Title */}
           <h2 className="section-title text-white mb-6">
-            {t('categoriesTitle', lang)} <span className="gold-text">{lang === 'ar' ? 'والتسوق' : '& More'}</span>
+            {t('categoriesTitle', lang)} <span className="gold-text">{t('shopAndMore', lang)}</span>
           </h2>
 
           {/* Gold Lines */}

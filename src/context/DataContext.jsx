@@ -45,6 +45,13 @@ const DEFAULT_SITE_SETTINGS = {
   updatedAt: new Date().toISOString()
 }
 
+// Normalize product from API (handle both _id and id)
+const normalizeProduct = (p) => ({
+  ...p,
+  id: p._id || p.id,
+  createdAt: p.createdAt || new Date().toISOString()
+})
+
 export function DataProvider({ children }) {
   const [perfumes, setPerfumes] = useState([])
   const [makeup, setMakeup] = useState([])
@@ -52,39 +59,41 @@ export function DataProvider({ children }) {
   const [error, setError] = useState(null)
 
   // Fetch products from API
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true)
-        const products = await api.getProducts()
-        const perfumesData = products.filter(p => p.productType === 'perfume' || !p.productType)
-        const makeupData = products.filter(p => p.productType === 'makeup')
-        setPerfumes(perfumesData)
-        setMakeup(makeupData)
-        setError(null)
-      } catch (err) {
-        console.error('Failed to load products:', err)
-        setError(err.message)
-        // Fallback to localStorage first, then default products
-        const savedPerfumes = localStorage.getItem('grayhut-perfumes')
-        const savedMakeup = localStorage.getItem('grayhut-makeup')
-        if (savedPerfumes) {
-          setPerfumes(JSON.parse(savedPerfumes))
-        } else {
-          // Use default products as fallback
-          setPerfumes(defaultProducts.filter(p => !p.category || p.category !== 'makeup'))
-        }
-        if (savedMakeup) {
-          setMakeup(JSON.parse(savedMakeup))
-        } else {
-          setMakeup(defaultProducts.filter(p => p.category === 'makeup'))
-        }
-      } finally {
-        setLoading(false)
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true)
+      const products = await api.getProducts()
+      // Normalize all products
+      const normalized = products.map(normalizeProduct)
+      const perfumesData = normalized.filter(p => p.productType === 'perfume' || !p.productType)
+      const makeupData = normalized.filter(p => p.productType === 'makeup')
+      setPerfumes(perfumesData)
+      setMakeup(makeupData)
+      setError(null)
+    } catch (err) {
+      console.error('Failed to load products from API:', err)
+      setError(err.message)
+      // Fallback to localStorage first, then default products
+      const savedPerfumes = localStorage.getItem('grayhut-perfumes')
+      const savedMakeup = localStorage.getItem('grayhut-makeup')
+      if (savedPerfumes) {
+        setPerfumes(JSON.parse(savedPerfumes))
+      } else {
+        setPerfumes(defaultProducts.filter(p => !p.category || p.category !== 'makeup'))
       }
+      if (savedMakeup) {
+        setMakeup(JSON.parse(savedMakeup))
+      } else {
+        setMakeup(defaultProducts.filter(p => p.category === 'makeup'))
+      }
+    } finally {
+      setLoading(false)
     }
-    loadProducts()
   }, [])
+
+  useEffect(() => {
+    fetchProducts()
+  }, [fetchProducts])
 
   // Categories (localStorage for now)
   const [categories, setCategories] = useState(() => {
@@ -142,15 +151,15 @@ export function DataProvider({ children }) {
   useEffect(() => { localStorage.setItem('grayhut-site-settings', JSON.stringify(siteSettings)) }, [siteSettings])
   useEffect(() => { localStorage.setItem('grayhut-special-offer', JSON.stringify(specialOffer)) }, [specialOffer])
 
-  // Perfume CRUD - API
+  // Perfume CRUD - API with refresh
   const addPerfume = useCallback(async (perfume) => {
     try {
       const newPerfume = await api.createProduct({ ...perfume, productType: 'perfume' })
-      setPerfumes(prev => [newPerfume, ...prev])
-      return newPerfume
+      const normalized = normalizeProduct(newPerfume)
+      setPerfumes(prev => [normalized, ...prev])
+      return normalized
     } catch (err) {
       console.error('Failed to add perfume:', err)
-      // Fallback to local
       const localPerfume = { ...perfume, id: uuidv4(), productType: 'perfume', createdAt: new Date().toISOString() }
       setPerfumes(prev => [localPerfume, ...prev])
       localStorage.setItem('grayhut-perfumes', JSON.stringify([localPerfume, ...perfumes]))
@@ -161,35 +170,34 @@ export function DataProvider({ children }) {
   const updatePerfume = useCallback(async (id, updates) => {
     try {
       const updated = await api.updateProduct(id, updates)
-      setPerfumes(prev => prev.map(p => p.id === id ? updated : p))
-      return updated
+      const normalized = normalizeProduct(updated)
+      setPerfumes(prev => prev.map(p => (p.id === id || p._id === id) ? normalized : p))
+      return normalized
     } catch (err) {
       console.error('Failed to update perfume:', err)
-      // Fallback to local
-      setPerfumes(prev => prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p))
+      setPerfumes(prev => prev.map(p => (p.id === id || p._id === id) ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p))
     }
   }, [])
 
   const deletePerfume = useCallback(async (id) => {
     try {
       await api.deleteProduct(id)
-      setPerfumes(prev => prev.filter(p => p.id !== id))
+      setPerfumes(prev => prev.filter(p => p.id !== id && p._id !== id))
     } catch (err) {
       console.error('Failed to delete perfume:', err)
-      // Fallback to local
-      setPerfumes(prev => prev.filter(p => p.id !== id))
+      setPerfumes(prev => prev.filter(p => p.id !== id && p._id !== id))
     }
   }, [])
 
-  // Makeup CRUD - API
+  // Makeup CRUD - API with refresh
   const addMakeup = useCallback(async (item) => {
     try {
       const newItem = await api.createProduct({ ...item, productType: 'makeup' })
-      setMakeup(prev => [newItem, ...prev])
-      return newItem
+      const normalized = normalizeProduct(newItem)
+      setMakeup(prev => [normalized, ...prev])
+      return normalized
     } catch (err) {
       console.error('Failed to add makeup:', err)
-      // Fallback to local
       const localMakeup = { ...item, id: uuidv4(), productType: 'makeup', createdAt: new Date().toISOString() }
       setMakeup(prev => [localMakeup, ...prev])
       return localMakeup
@@ -199,21 +207,22 @@ export function DataProvider({ children }) {
   const updateMakeup = useCallback(async (id, updates) => {
     try {
       const updated = await api.updateProduct(id, updates)
-      setMakeup(prev => prev.map(m => m.id === id ? updated : m))
-      return updated
+      const normalized = normalizeProduct(updated)
+      setMakeup(prev => prev.map(m => (m.id === id || m._id === id) ? normalized : m))
+      return normalized
     } catch (err) {
       console.error('Failed to update makeup:', err)
-      setMakeup(prev => prev.map(m => m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m))
+      setMakeup(prev => prev.map(m => (m.id === id || m._id === id) ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m))
     }
   }, [])
 
   const deleteMakeup = useCallback(async (id) => {
     try {
       await api.deleteProduct(id)
-      setMakeup(prev => prev.filter(m => m.id !== id))
+      setMakeup(prev => prev.filter(m => m.id !== id && m._id !== id))
     } catch (err) {
       console.error('Failed to delete makeup:', err)
-      setMakeup(prev => prev.filter(m => m.id !== id))
+      setMakeup(prev => prev.filter(m => m.id !== id && m._id !== id))
     }
   }, [])
 
@@ -298,6 +307,8 @@ export function DataProvider({ children }) {
       // Data
       perfumes, makeup, categories, testimonials, orders, siteSettings, specialOffer, allProducts,
       loading, error,
+      // Refresh function
+      refreshProducts: fetchProducts,
       // Perfume CRUD
       addPerfume, updatePerfume, deletePerfume,
       // Makeup CRUD

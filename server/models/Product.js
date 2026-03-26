@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['luxury', 'women', 'men', 'unisex', 'arabian', 'lips', 'eyes', 'face', 'complexion'],
+    enum: ['luxury', 'women', 'men', 'unisex', 'arabian', 'lips', 'eyes', 'face', 'complexion', 'makeup', 'skincare', 'hair', 'fragrance', 'body'],
     default: 'luxury'
   },
   type: {
@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
-    default: 'NOIR ESSENCE'
+    default: 'GrayHut'
   },
   description: {
     type: String,
@@ -78,5 +78,14 @@ const productSchema = new mongoose.Schema({
 }, {
   timestamps: true
 })
+
+// Virtual for frontend compatibility (convert _id to id)
+productSchema.virtual('id').get(function() {
+  return this._id.toHexString()
+})
+
+// Ensure virtuals are included in JSON
+productSchema.set('toJSON', { virtuals: true })
+productSchema.set('toObject', { virtuals: true })
 
 module.exports = mongoose.model('Product', productSchema)

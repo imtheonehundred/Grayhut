@@ -84,13 +84,13 @@ export default function Testimonials() {
             onClick={goToPrev}
             className={`absolute ${lang === 'ar' ? 'right-0' : 'left-0'} top-1/2 -translate-y-1/2 ${lang === 'ar' ? '-translate-x-4 md:-translate-x-12' : 'translate-x-4 md:translate-x-12'} p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors`}
           >
-            {lang === 'ar' ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
+            <ChevronLeft size={24} />
           </button>
           <button
             onClick={goToNext}
             className={`absolute ${lang === 'ar' ? 'left-0' : 'right-0'} top-1/2 -translate-y-1/2 ${lang === 'ar' ? 'translate-x-4 md:translate-x-12' : '-translate-x-4 md:-translate-x-12'} p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors`}
           >
-            {lang === 'ar' ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+            <ChevronRight size={24} />
           </button>
         </motion.div>
 

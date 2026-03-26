@@ -242,7 +242,7 @@ export default function SearchFilter({ products, onFilter }) {
 
               {/* Clear Filters */}
               {hasActiveFilters && (
-                <div className={`mt-6 pt-6 border-t border-white/10 flex ${lang === 'ar' ? 'justify-start' : 'justify-end'}`}>
+                <div className={`mt-6 pt-6 border-t border-white/10 flex ${lang === 'ar' ? 'justify-end' : 'justify-end'}`}>
                   <button
                     onClick={clearFilters}
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-accent transition-colors"

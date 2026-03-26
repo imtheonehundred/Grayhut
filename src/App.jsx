@@ -15,6 +15,7 @@ import Testimonials from './components/sections/Testimonials'
 import Newsletter from './components/sections/Newsletter'
 import CartDrawer from './components/ui/CartDrawer'
 import MakeupPage from './components/pages/MakeupPage'
+import ProductsPage from './components/pages/ProductsPage'
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin'
@@ -59,6 +60,18 @@ function App() {
                 <Navbar />
                 <main>
                   <MakeupPage />
+                </main>
+                <Footer />
+                <CartDrawer />
+              </>
+            } />
+
+            {/* Products by Category */}
+            <Route path="/category/:category" element={
+              <>
+                <Navbar />
+                <main>
+                  <ProductsPage />
                 </main>
                 <Footer />
                 <CartDrawer />
