@@ -81,8 +81,8 @@ export default function AdminLayout() {
             <div className="p-4 border-b border-white/5 flex items-center justify-between">
               <div>
                 <h1 className="font-playfair text-xl font-semibold">
-                  <span className="gold-text">NOIR</span>
-                  <span className="text-white"> ESSENCE</span>
+                  <span className="gold-text">Gray</span>
+                  <span className="text-white">Hut</span>
                 </h1>
                 <p className="text-xs text-gray-500 tracking-widest uppercase">Admin</p>
               </div>

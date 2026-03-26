@@ -24,10 +24,10 @@ export function AdminProvider({ children }) {
 
     try {
       // Demo authentication
-      if (email === 'admin@noiressence.com' && password === 'admin123') {
+      if (email === 'admin@grayhut.com' && password === 'admin123') {
         const user = {
           id: '1',
-          email: 'admin@noiressence.com',
+          email: 'admin@grayhut.com',
           name: 'Administrator',
           role: 'superadmin',
           lastLogin: new Date().toISOString()

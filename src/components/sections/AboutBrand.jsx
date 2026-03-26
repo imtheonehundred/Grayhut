@@ -1,9 +1,12 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { Award, Heart, Sparkles } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../data/translations'
 import { ScrollReveal, AnimatedWords, FadeUp, CinematicSection } from '../ui/animations'
 
 export default function AboutBrand() {
+  const { lang } = useLanguage()
   const ref = useRef(null)
   const imageRef = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -15,6 +18,12 @@ export default function AboutBrand() {
 
   // Parallax for image
   const imageY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%'])
+
+  const features = [
+    { icon: Award, label: lang === 'ar' ? 'جودة عالية' : 'Premium Quality', value: '100%' },
+    { icon: Heart, label: lang === 'ar' ? 'عملاء سعداء' : 'Happy Clients', value: '50K+' },
+    { icon: Sparkles, label: lang === 'ar' ? 'منتج مميز' : 'Unique Products', value: '200+' }
+  ]
 
   return (
     <section id="about" className="py-24 lg:py-32 px-4 md:px-6 lg:px-12 relative overflow-hidden bg-background">
@@ -34,8 +43,8 @@ export default function AboutBrand() {
                 style={{ y: imageY, willChange: 'transform' }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800&q=80"
-                  alt="Perfume Crafting"
+                  src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80"
+                  alt="GrayHut Cosmetics"
                   className="w-full h-[120%] object-cover"
                 />
               </motion.div>
@@ -49,15 +58,17 @@ export default function AboutBrand() {
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              className="absolute -bottom-6 -right-4 md:right-8 bg-surface/90 backdrop-blur-sm p-6 border border-accent/30 shadow-[0_0_60px_rgba(212,175,55,0.15)]"
+              className={`absolute -bottom-6 ${lang === 'ar' ? '-left-4 md:-left-8' : '-right-4 md:right-8'} bg-surface/90 backdrop-blur-sm p-6 border border-accent/30 shadow-[0_0_60px_rgba(212,175,55,0.15)]`}
             >
-              <p className="font-playfair text-4xl font-semibold gold-text">130+</p>
-              <p className="text-gray-400 text-sm tracking-wider">Years of Excellence</p>
+              <p className="font-playfair text-4xl font-semibold gold-text">200+</p>
+              <p className="text-gray-400 text-sm tracking-wider">
+                {lang === 'ar' ? 'منتج فاخر' : 'Luxury Products'}
+              </p>
             </motion.div>
 
             {/* Corner Accents */}
-            <div className="absolute top-4 left-4 w-16 h-16 border-l-2 border-t-2 border-accent/40" />
-            <div className="absolute bottom-4 right-4 w-16 h-16 border-r-2 border-b-2 border-accent/40" />
+            <div className="absolute top-4 start-4 w-16 h-16 border-s-2 border-t-2 border-accent/40" />
+            <div className="absolute bottom-4 end-4 w-16 h-16 border-e-2 border-b-2 border-accent/40" />
           </ScrollReveal>
 
           {/* Content Side */}
@@ -65,14 +76,14 @@ export default function AboutBrand() {
             {/* Label */}
             <ScrollReveal type="blur" delay={0}>
               <p className="text-accent tracking-[0.3em] uppercase text-xs md:text-sm mb-4">
-                Our Heritage
+                {lang === 'ar' ? 'تراثنا' : 'Our Heritage'}
               </p>
             </ScrollReveal>
 
             {/* Title */}
             <ScrollReveal type="blur" delay={0.1}>
               <AnimatedWords
-                text="A Legacy of Timeless Elegance"
+                text={t('aboutTitle', lang)}
                 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6 block"
                 stagger={0.03}
               />
@@ -80,44 +91,33 @@ export default function AboutBrand() {
 
             {/* Gold Line - Clip reveal */}
             <ScrollReveal type="clip" delay={0.3} direction="left">
-              <div className="w-24 h-[2px] bg-gradient-to-r from-accent to-transparent mb-8" />
+              <div className={`w-24 h-[2px] bg-gradient-to-r ${lang === 'ar' ? 'from-transparent to-accent' : 'from-accent to-transparent'} mb-8`} />
             </ScrollReveal>
 
             {/* Story */}
             <div className="space-y-6 text-gray-300 leading-relaxed">
               <ScrollReveal type="blur" delay={0.3}>
                 <p className="font-cormorant text-lg md:text-xl italic text-white">
-                  "Since 1895, NOIR ESSENCE has been the epitome of luxury perfumery,
-                  crafting scents that transcend time and capture the essence of
-                  life's most precious moments."
+                  "{t('aboutQuote', lang)}"
                 </p>
               </ScrollReveal>
 
               <ScrollReveal type="fade" delay={0.4}>
                 <p>
-                  Our master perfumers source the rarest ingredients from across the globe—
-                  Bulgarian roses plucked at dawn, Arabian oud aged for decades, and
-                  Calabrian bergamot kissed by Mediterranean sun.
+                  {t('aboutText1', lang)}
                 </p>
               </ScrollReveal>
 
               <ScrollReveal type="fade" delay={0.5}>
                 <p>
-                  Each fragrance is a masterpiece, meticulously blended using
-                  time-honored techniques passed down through five generations of
-                  master perfumers. We create scents that don't just smell extraordinary—
-                  they tell a story, evoke emotions, and become an extension of who you are.
+                  {t('aboutText2', lang)}
                 </p>
               </ScrollReveal>
             </div>
 
             {/* Features - Staggered reveal */}
             <div className="grid grid-cols-3 gap-6 mt-12">
-              {[
-                { icon: Award, label: 'Premium Quality', value: '100%' },
-                { icon: Heart, label: 'Happy Clients', value: '50K+' },
-                { icon: Sparkles, label: 'Unique Scents', value: '85+' }
-              ].map((feature, i) => (
+              {features.map((feature, i) => (
                 <ScrollReveal key={i} type="scale" delay={0.5 + i * 0.1}>
                   <motion.div
                     whileHover={{ y: -5 }}

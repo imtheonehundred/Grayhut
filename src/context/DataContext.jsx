@@ -7,39 +7,39 @@ const DataContext = createContext()
 
 const DEFAULT_SITE_SETTINGS = {
   hero: {
-    preTitle: 'Est. 1895 • Paris',
-    titleLine1: 'Discover the',
-    titleLine2Part1: 'Essence',
-    titleLine2Part2: 'of',
-    titleLine3Part1: 'Luxury',
+    preTitle: 'اكتشف جمالك',
+    titleLine1: 'اكتشف',
+    titleLine2Part1: 'أفضل',
+    titleLine2Part2: '',
+    titleLine3Part1: 'المستحضرات',
     titleLine3Part2: '',
-    subtitle: 'Exquisite fragrances crafted from the world\'s finest ingredients.',
-    ctaText: 'Shop Now',
-    backgroundImage: 'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=1920&q=80'
+    subtitle: 'مستحضرات تجميل فاخرة من أجود المواد الطبيعية',
+    ctaText: 'تسوق الآن',
+    backgroundImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=80'
   },
   about: {
-    preTitle: 'Our Heritage',
-    title: 'A Legacy of Timeless Elegance',
-    quote: 'Since 1895, NOIR ESSENCE has been the epitome of luxury perfumery, crafting scents that transcend time and capture the essence of life\'s most precious moments.',
-    bodyParagraph1: 'Our master perfumers source the rarest ingredients from across the globe—Bulgarian roses plucked at dawn, Arabian oud aged for decades, and Calabrian bergamot kissed by Mediterranean sun.',
-    bodyParagraph2: 'Each fragrance is a masterpiece, meticulously blended using time-honored techniques passed down through five generations of master perfumers.',
-    image: 'https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800&q=80',
+    preTitle: 'تراثنا',
+    title: 'إرث من الأناقة الخالدة',
+    quote: 'GrayHut وجهتك الأولى لمستحضرات التجميل الفاخرة. نقدم لك أفضل المنتجات من أشهر الماركات العالمية.',
+    bodyParagraph1: 'نقدم لك أفضل المستحضرات من أشهر الماركات العالمية',
+    bodyParagraph2: 'جميع منتجاتنا أصلية 100% ومختارة بعناية فائقة',
+    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
     stats: [
-      { label: 'Premium Quality', value: '100%' },
-      { label: 'Happy Clients', value: '50K+' },
-      { label: 'Unique Scents', value: '85+' }
+      { label: 'جودة عالية', value: '100%' },
+      { label: 'عملاء سعداء', value: '50K+' },
+      { label: 'منتجات فاخرة', value: '200+' }
     ]
   },
   newsletter: {
-    title: 'Join the Inner Circle',
-    subtitle: 'Subscribe to receive exclusive previews of new collections, members-only offers, and the latest from our master perfumers.',
-    placeholder: 'Enter your email address',
-    ctaText: 'Subscribe'
+    title: 'انضم للنادي الخاص',
+    subtitle: 'احصل على خصم 10% على طلبك الأول',
+    placeholder: 'بريدك الإلكتروني',
+    ctaText: 'اشترك'
   },
   footer: {
-    tagline: 'Where Luxury Meets Essence',
-    contactEmail: 'contact@noiressence.com',
-    contactPhone: '+33 1 23 45 67 89',
+    tagline: 'جمالك يبدأ من هنا',
+    contactEmail: 'info@grayhut.com',
+    contactPhone: '+964 770 123 4567',
     socialLinks: { instagram: '', facebook: '', twitter: '' }
   },
   updatedAt: new Date().toISOString()

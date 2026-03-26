@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, CheckCircle } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 
 export default function Newsletter() {
+  const { lang } = useLanguage();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -53,12 +56,12 @@ export default function Newsletter() {
 
           {/* Label */}
           <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            Stay Connected
+            {lang === 'ar' ? 'ابق على اطلاع' : 'Stay Connected'}
           </p>
 
           {/* Title */}
           <h2 className="section-title text-white mb-6">
-            Join the <span className="gold-text">Inner Circle</span>
+            {t('newsletterTitle', lang)}
           </h2>
 
           {/* Gold Line */}
@@ -70,18 +73,17 @@ export default function Newsletter() {
 
           {/* Description */}
           <p className="text-gray-400 mb-10 max-w-xl mx-auto">
-            Subscribe to receive exclusive previews of new collections,
-            members-only offers, and the latest from our master perfumers.
+            {t('newsletterSubtitle', lang)}
           </p>
 
           {/* Form */}
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="relative max-w-lg mx-auto">
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className={`flex flex-col sm:flex-row gap-4 ${lang === 'ar' ? 'rtl' : 'ltr'}`}>
                 <div className="flex-1 relative">
                   <input
                     type="email"
-                    placeholder="Enter your email address"
+                    placeholder={t('emailPlaceholder', lang)}
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -91,11 +93,11 @@ export default function Newsletter() {
                       isError
                         ? 'border-red-500'
                         : 'border-white/10 focus:border-accent'
-                    } text-white placeholder-gray-500 focus:outline-none transition-colors`}
+                    } text-white placeholder-gray-500 focus:outline-none transition-colors ${lang === 'ar' ? 'text-right' : 'text-left'}`}
                   />
                   {isError && (
-                    <p className="absolute -bottom-6 left-0 text-red-500 text-xs">
-                      Please enter a valid email address
+                    <p className={`absolute -bottom-6 ${lang === 'ar' ? 'right-0' : 'left-0'} text-red-500 text-xs`}>
+                      {lang === 'ar' ? 'الرجاء إدخال بريد إلكتروني صحيح' : 'Please enter a valid email address'}
                     </p>
                   )}
                 </div>
@@ -105,7 +107,7 @@ export default function Newsletter() {
                   type="submit"
                   className="btn-primary whitespace-nowrap"
                 >
-                  Subscribe
+                  {t('subscribe', lang)}
                 </motion.button>
               </div>
             </form>
@@ -117,17 +119,17 @@ export default function Newsletter() {
             >
               <CheckCircle size={48} className="text-green-500" />
               <p className="text-white font-playfair text-xl">
-                Welcome to the Inner Circle
+                {lang === 'ar' ? 'مرحباً بك في النادي الخاص!' : 'Welcome to the Inner Circle!'}
               </p>
               <p className="text-gray-400 text-sm">
-                Check your inbox for a special welcome gift
+                {lang === 'ar' ? 'تفضل بزيارة بريدك الإلكتروني لهدية الترحيب' : 'Check your inbox for a special welcome gift'}
               </p>
             </motion.div>
           )}
 
           {/* Privacy Note */}
           <p className="text-gray-600 text-xs mt-8">
-            By subscribing, you agree to our Privacy Policy. Unsubscribe at any time.
+            {lang === 'ar' ? 'بالاشتراك، أنت توافق على سياسة الخصوصية. يمكنك إلغاء الاشتراك في أي وقت.' : 'By subscribing, you agree to our Privacy Policy. Unsubscribe at any time.'}
           </p>
         </motion.div>
       </div>

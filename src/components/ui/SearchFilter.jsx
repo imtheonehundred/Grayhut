@@ -1,46 +1,54 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 
 export default function SearchFilter({ products, onFilter }) {
+  const { lang } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     category: 'all',
-    gender: 'all',
+    type: 'all',
     priceRange: 'all',
     sortBy: 'default',
   });
 
   const categories = [
-    { value: 'all', label: 'All Categories' },
-    { value: 'men', label: 'For Him' },
-    { value: 'women', label: 'For Her' },
-    { value: 'unisex', label: 'Unisex' },
-    { value: 'arabian', label: 'Arabian' },
-    { value: 'luxury', label: 'Luxury Exclusive' },
+    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
+    { value: 'makeup', label: lang === 'ar' ? 'مكياج' : 'Makeup' },
+    { value: 'skincare', label: lang === 'ar' ? 'عناية بالبشرة' : 'Skincare' },
+    { value: 'hair', label: lang === 'ar' ? 'شعر' : 'Hair' },
+    { value: 'fragrance', label: lang === 'ar' ? 'عطور' : 'Fragrance' },
+    { value: 'body', label: lang === 'ar' ? 'جسم' : 'Body' },
   ];
 
-  const genderOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
-    { value: 'unisex', label: 'Unisex' },
+  const types = [
+    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
+    { value: 'lipstick', label: 'Lipstick' },
+    { value: 'mascara', label: 'Mascara' },
+    { value: 'eyeshadow', label: 'Eyeshadow' },
+    { value: 'foundation', label: 'Foundation' },
+    { value: 'serum', label: 'Serum' },
+    { value: 'moisturizer', label: 'Moisturizer' },
+    { value: 'shampoo', label: 'Shampoo' },
+    { value: 'perfume', label: 'Perfume' },
   ];
 
   const priceRanges = [
-    { value: 'all', label: 'All Prices' },
-    { value: '0-200', label: 'Under $200' },
-    { value: '200-300', label: '$200 - $300' },
-    { value: '300-500', label: '$300 - $500' },
-    { value: '500+', label: '$500+' },
+    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All Prices' },
+    { value: '0-30000', label: lang === 'ar' ? 'أقل من 30,000 د.ع' : 'Under 30,000 IQD' },
+    { value: '30000-60000', label: lang === 'ar' ? '30,000 - 60,000 د.ع' : '30,000 - 60,000 IQD' },
+    { value: '60000-100000', label: lang === 'ar' ? '60,000 - 100,000 د.ع' : '60,000 - 100,000 IQD' },
+    { value: '100000+', label: lang === 'ar' ? 'أكثر من 100,000 د.ع' : '100,000+ IQD' },
   ];
 
   const sortOptions = [
-    { value: 'default', label: 'Featured' },
-    { value: 'price-low', label: 'Price: Low to High' },
-    { value: 'price-high', label: 'Price: High to Low' },
-    { value: 'name', label: 'Name A-Z' },
+    { value: 'default', label: lang === 'ar' ? 'مميز' : 'Featured' },
+    { value: 'price-low', label: lang === 'ar' ? 'السعر: الأقل للأعلى' : 'Price: Low to High' },
+    { value: 'price-high', label: lang === 'ar' ? 'السعر: الأعلى للأقل' : 'Price: High to Low' },
+    { value: 'name', label: lang === 'ar' ? 'الاسم أ-ي' : 'Name A-Z' },
   ];
 
   const applyFilters = () => {
@@ -60,16 +68,16 @@ export default function SearchFilter({ products, onFilter }) {
       filtered = filtered.filter((p) => p.category === filters.category);
     }
 
-    // Gender
-    if (filters.gender !== 'all') {
-      filtered = filtered.filter((p) => p.gender === filters.gender);
+    // Type
+    if (filters.type !== 'all') {
+      filtered = filtered.filter((p) => p.type === filters.type);
     }
 
     // Price Range
     if (filters.priceRange !== 'all') {
       const [min, max] = filters.priceRange.split('-').map(Number);
-      if (filters.priceRange === '500+') {
-        filtered = filtered.filter((p) => p.price >= 500);
+      if (filters.priceRange === '100000+') {
+        filtered = filtered.filter((p) => p.price >= 100000);
       } else if (max) {
         filtered = filtered.filter((p) => p.price >= min && p.price <= max);
       }
@@ -98,7 +106,7 @@ export default function SearchFilter({ products, onFilter }) {
   const clearFilters = () => {
     setFilters({
       category: 'all',
-      gender: 'all',
+      type: 'all',
       priceRange: 'all',
       sortBy: 'default',
     });
@@ -107,7 +115,7 @@ export default function SearchFilter({ products, onFilter }) {
 
   const hasActiveFilters =
     filters.category !== 'all' ||
-    filters.gender !== 'all' ||
+    filters.type !== 'all' ||
     filters.priceRange !== 'all' ||
     filters.sortBy !== 'default' ||
     searchQuery;
@@ -119,14 +127,14 @@ export default function SearchFilter({ products, onFilter }) {
         <div className="relative flex-1">
           <Search
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+            className={`absolute ${lang === 'ar' ? 'right-4' : 'left-4'} top-1/2 -translate-y-1/2 text-gray-500`}
           />
           <input
             type="text"
-            placeholder="Search fragrances..."
+            placeholder={t('searchProducts', lang)}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 bg-surface border border-white/10 text-white placeholder-gray-500 focus:border-accent focus:outline-none transition-colors"
+            className={`w-full ${lang === 'ar' ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-surface border border-white/10 text-white placeholder-gray-500 focus:border-accent focus:outline-none transition-colors`}
           />
         </div>
 
@@ -140,7 +148,7 @@ export default function SearchFilter({ products, onFilter }) {
           }`}
         >
           <SlidersHorizontal size={20} />
-          <span>Filters</span>
+          <span>{lang === 'ar' ? 'تصفية' : 'Filters'}</span>
           {hasActiveFilters && (
             <span className="w-2 h-2 bg-accent rounded-full" />
           )}
@@ -162,7 +170,7 @@ export default function SearchFilter({ products, onFilter }) {
                 {/* Category */}
                 <div>
                   <label className="block text-sm text-gray-400 mb-2 tracking-wider uppercase">
-                    Category
+                    {t('category', lang)}
                   </label>
                   <select
                     value={filters.category}
@@ -177,17 +185,17 @@ export default function SearchFilter({ products, onFilter }) {
                   </select>
                 </div>
 
-                {/* Gender */}
+                {/* Type */}
                 <div>
                   <label className="block text-sm text-gray-400 mb-2 tracking-wider uppercase">
-                    Gender
+                    {lang === 'ar' ? 'النوع' : 'Type'}
                   </label>
                   <select
-                    value={filters.gender}
-                    onChange={(e) => handleFilterChange('gender', e.target.value)}
+                    value={filters.type}
+                    onChange={(e) => handleFilterChange('type', e.target.value)}
                     className="w-full p-3 bg-primary border border-white/10 text-white focus:border-accent focus:outline-none"
                   >
-                    {genderOptions.map((opt) => (
+                    {types.map((opt) => (
                       <option key={opt.value} value={opt.value}>
                         {opt.label}
                       </option>
@@ -198,7 +206,7 @@ export default function SearchFilter({ products, onFilter }) {
                 {/* Price Range */}
                 <div>
                   <label className="block text-sm text-gray-400 mb-2 tracking-wider uppercase">
-                    Price Range
+                    {t('price', lang)}
                   </label>
                   <select
                     value={filters.priceRange}
@@ -216,7 +224,7 @@ export default function SearchFilter({ products, onFilter }) {
                 {/* Sort */}
                 <div>
                   <label className="block text-sm text-gray-400 mb-2 tracking-wider uppercase">
-                    Sort By
+                    {lang === 'ar' ? 'ترتيب' : 'Sort By'}
                   </label>
                   <select
                     value={filters.sortBy}
@@ -234,13 +242,13 @@ export default function SearchFilter({ products, onFilter }) {
 
               {/* Clear Filters */}
               {hasActiveFilters && (
-                <div className="mt-6 pt-6 border-t border-white/10 flex justify-end">
+                <div className={`mt-6 pt-6 border-t border-white/10 flex ${lang === 'ar' ? 'justify-start' : 'justify-end'}`}>
                   <button
                     onClick={clearFilters}
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-accent transition-colors"
                   >
                     <X size={16} />
-                    Clear All Filters
+                    {lang === 'ar' ? 'مسح الكل' : 'Clear All Filters'}
                   </button>
                 </div>
               )}
@@ -250,9 +258,9 @@ export default function SearchFilter({ products, onFilter }) {
       </AnimatePresence>
 
       {/* Apply Button */}
-      <div className="flex justify-end">
+      <div className={`flex ${lang === 'ar' ? 'justify-start' : 'justify-end'}`}>
         <button onClick={applyFilters} className="btn-secondary">
-          Apply Filters
+          {lang === 'ar' ? 'تطبيق' : 'Apply Filters'}
         </button>
       </div>
     </div>

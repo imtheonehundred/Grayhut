@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 import { testimonials } from '../../data/products';
 import TestimonialCard from '../ui/TestimonialCard';
 
 export default function Testimonials() {
+  const { lang } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -41,12 +44,12 @@ export default function Testimonials() {
         >
           {/* Label */}
           <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            Client Stories
+            {t('satisfiedCustomers', lang)}
           </p>
 
           {/* Title */}
           <h2 className="section-title text-white mb-6">
-            What They <span className="gold-text">Say</span>
+            {t('testimonialsTitle', lang)}
           </h2>
 
           {/* Gold Lines */}
@@ -79,15 +82,15 @@ export default function Testimonials() {
           {/* Navigation Arrows */}
           <button
             onClick={goToPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors"
+            className={`absolute ${lang === 'ar' ? 'right-0' : 'left-0'} top-1/2 -translate-y-1/2 ${lang === 'ar' ? '-translate-x-4 md:-translate-x-12' : 'translate-x-4 md:translate-x-12'} p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors`}
           >
-            <ChevronLeft size={24} />
+            {lang === 'ar' ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors"
+            className={`absolute ${lang === 'ar' ? 'left-0' : 'right-0'} top-1/2 -translate-y-1/2 ${lang === 'ar' ? 'translate-x-4 md:translate-x-12' : '-translate-x-4 md:-translate-x-12'} p-3 border border-white/10 text-gray-400 hover:text-accent hover:border-accent transition-colors`}
           >
-            <ChevronRight size={24} />
+            {lang === 'ar' ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
           </button>
         </motion.div>
 

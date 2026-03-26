@@ -35,11 +35,11 @@ export default function AdminLogin() {
         {/* Logo */}
         <div className="text-center mb-12">
           <h1 className="font-playfair text-4xl font-semibold tracking-wider">
-            <span className="gold-text">NOIR</span>
-            <span className="text-white"> ESSENCE</span>
+            <span className="gold-text">Gray</span>
+            <span className="text-white">Hut</span>
           </h1>
           <p className="text-gray-500 tracking-widest uppercase text-sm mt-2">
-            Admin Panel
+            لوحة التحكم
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-primary border border-white/10 pl-12 pr-4 py-4 text-white placeholder-gray-600 focus:border-accent/50 focus:outline-none transition-colors"
-                placeholder="admin@noiressence.com"
+                placeholder="admin@grayhut.com"
                 required
               />
             </div>
@@ -115,13 +115,13 @@ export default function AdminLogin() {
 
         {/* Footer */}
         <p className="text-center text-gray-600 text-xs mt-6">
-          NOIR ESSENCE Admin Portal
+          GrayHut Admin Portal
         </p>
 
         {/* Demo Credentials */}
         <div className="mt-6 p-4 bg-surface/50 border border-white/5 text-center">
           <p className="text-gray-500 text-xs mb-2">Demo Credentials</p>
-          <p className="text-gray-400 text-sm">admin@noiressence.com / admin123</p>
+          <p className="text-gray-400 text-sm">admin@grayhut.com / admin123</p>
         </div>
       </motion.div>
     </div>

@@ -3,8 +3,11 @@ import { countdownDate, products } from '../../data/products';
 import CountdownTimer from '../ui/CountdownTimer';
 import ProductCard from '../ui/ProductCard';
 import { Gift } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 
 export default function SpecialOffer() {
+  const { lang } = useLanguage();
   const offerProducts = products.filter((p) => p.originalPrice);
 
   return (
@@ -20,12 +23,12 @@ export default function SpecialOffer() {
         >
           {/* Label */}
           <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            Limited Time
+            {t('limitedTime', lang)}
           </p>
 
           {/* Title */}
           <h2 className="section-title text-white mb-6">
-            Special <span className="gold-text">Offers</span>
+            {t('specialOffers', lang)}
           </h2>
 
           {/* Gold Lines */}
@@ -47,7 +50,7 @@ export default function SpecialOffer() {
           <div className="flex items-center gap-3 mb-4">
             <Gift size={24} className="text-accent" />
             <span className="text-gray-400 tracking-widest uppercase text-sm">
-              Offer Ends In
+              {lang === 'ar' ? 'ينتهي العرض خلال' : 'Offer Ends In'}
             </span>
           </div>
           <CountdownTimer targetDate={countdownDate} />
@@ -69,7 +72,7 @@ export default function SpecialOffer() {
           className="text-center mt-16"
         >
           <button className="btn-primary">
-            Shop All Offers
+            {lang === 'ar' ? 'تسوق كل العروض' : 'Shop All Offers'}
           </button>
         </motion.div>
       </div>

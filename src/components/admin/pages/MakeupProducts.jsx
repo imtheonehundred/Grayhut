@@ -106,7 +106,7 @@ export default function MakeupProducts() {
       ...formData,
       price: Number(formData.price),
       originalPrice: formData.originalPrice ? Number(formData.originalPrice) : null,
-      brand: 'NOIR ESSENCE'
+      brand: 'GrayHut'
     }
 
     if (editingItem) {
