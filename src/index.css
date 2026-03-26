@@ -12,6 +12,26 @@
     overflow-x: hidden;
   }
 
+  /* RTL Support - Only when dir="rtl" */
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* RTL-specific utilities */
+  [dir="rtl"] .rtl\:text-right {
+    text-align: right;
+  }
+
+  [dir="ltr"] .ltr\:text-left {
+    text-align: left;
+  }
+
   ::selection {
     @apply bg-accent/30 text-white;
   }

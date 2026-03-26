@@ -108,86 +108,90 @@ export default function Hero() {
 
       {/* Content with fade on scroll */}
       <motion.div
-        className="relative h-full flex flex-col items-center justify-center text-center px-6"
+        className="relative h-full flex flex-col items-center justify-center text-center px-4 sm:px-6"
         style={{
           opacity: contentOpacity,
           y: contentY
         }}
       >
-        {/* Pre Title */}
-        <motion.p
-          initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-          animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-accent tracking-[0.4em] uppercase text-xs md:text-sm mb-8"
-        >
-          {t('heroPreTitle', lang)}
-        </motion.p>
-
-        {/* Main Title with character animation */}
-        <div className="mb-8 overflow-hidden">
-          <AnimatedChars
-            text={t('heroTitle1', lang)}
-            className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold text-white block"
-            stagger={0.03}
-          />
-        </div>
-
-        <div className="mb-16 overflow-hidden">
-          <AnimatedWords
-            text={t('heroTitle2', lang)}
-            className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold"
-            stagger={0.05}
-          />
-        </div>
-
-        <div className="mb-16 overflow-hidden">
-          <AnimatedWords
-            text={t('heroTitle3', lang)}
-            className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold gold-text"
-            stagger={0.05}
-          />
-        </div>
-
-        {/* Subtitle with fade up */}
-        <motion.p
-          initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-          animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="font-cormorant text-lg md:text-2xl text-gray-300 max-w-3xl mb-16 italic leading-relaxed"
-        >
-          {t('heroSubtitle', lang)}
-        </motion.p>
-
-        {/* CTA Button with magnetic effect */}
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.9 }}
-          animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <motion.button
-            onClick={() => scrollToSection('featured')}
-            className="group relative px-14 py-5 overflow-hidden"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+        {/* Content Wrapper with max-width */}
+        <div className="w-full max-w-4xl mx-auto">
+          {/* Pre Title */}
+          <motion.p
+            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+            animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+            transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            className="text-accent tracking-[0.3em] sm:tracking-[0.4em] uppercase text-xs sm:text-sm mb-6 sm:mb-8"
           >
-            {/* Button Background */}
-            <span className="absolute inset-0 bg-gradient-to-r from-accent via-yellow-400 to-accent" />
+            {t('heroPreTitle', lang)}
+          </motion.p>
 
-            {/* Shine Animation */}
-            <motion.span
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-              initial={{ x: '-100%' }}
-              whileHover={{ x: '100%' }}
-              transition={{ duration: 0.6 }}
+          {/* Main Title with character animation */}
+          <div className="mb-4 sm:mb-6 overflow-hidden">
+            <AnimatedChars
+              text={t('heroTitle1', lang)}
+              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white block leading-tight"
+              stagger={0.03}
             />
+          </div>
 
-            {/* Button Text */}
-            <span className="relative text-primary font-semibold tracking-[0.2em] uppercase text-sm">
-              {t('shopNow', lang)}
-            </span>
-          </motion.button>
-        </motion.div>
+          <div className="mb-6 sm:mb-8 overflow-hidden">
+            <AnimatedWords
+              text={t('heroTitle2', lang)}
+              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight"
+              stagger={0.05}
+            />
+          </div>
+
+          <div className="mb-8 sm:mb-12 overflow-hidden">
+            <AnimatedWords
+              text={t('heroTitle3', lang)}
+              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold gold-text leading-tight"
+              stagger={0.05}
+            />
+          </div>
+
+          {/* Subtitle with fade up */}
+          <motion.p
+            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+            animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+            transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="font-cormorant text-base sm:text-lg md:text-2xl text-gray-300 max-w-2xl mx-auto mb-10 sm:mb-16 italic leading-relaxed"
+          >
+            {t('heroSubtitle', lang)}
+          </motion.p>
+
+          {/* CTA Button - Centered */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex justify-center"
+          >
+            <motion.button
+              onClick={() => scrollToSection('featured')}
+              className="group relative px-8 sm:px-14 py-4 sm:py-5 overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {/* Button Background */}
+              <span className="absolute inset-0 bg-gradient-to-r from-accent via-yellow-400 to-accent" />
+
+              {/* Shine Animation */}
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: '100%' }}
+                transition={{ duration: 0.6 }}
+              />
+
+              {/* Button Text */}
+              <span className="relative text-primary font-semibold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm">
+                {t('shopNow', lang)}
+              </span>
+            </motion.button>
+          </motion.div>
+        </div>
 
         {/* Gold Line Decoration */}
         <motion.div

@@ -94,16 +94,16 @@ export default function Navbar() {
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className={`flex items-center justify-between h-20 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+          <div className={`flex items-center justify-between h-16 sm:h-20 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
             {/* Left Links - Desktop */}
-            <div className={`hidden lg:flex items-center gap-8 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
+            <div className={`hidden lg:flex items-center gap-6 xl:gap-8 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
               {navLinks.slice(0, 3).map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-sm tracking-widest uppercase transition-colors duration-300 relative group ${
+                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
                     isActive(link.href) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
@@ -116,7 +116,7 @@ export default function Navbar() {
             {/* Logo - Center */}
             <motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
               <Link to="/" className="flex items-center gap-2">
-                <span className="font-playfair text-2xl md:text-3xl font-semibold tracking-wider">
+                <span className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold tracking-wider">
                   <span className="gold-text">Gray</span>
                   <span className="text-white">Hut</span>
                 </span>
@@ -124,13 +124,13 @@ export default function Navbar() {
             </motion.div>
 
             {/* Right Links - Desktop */}
-            <div className={`hidden lg:flex items-center gap-8 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
+            <div className={`hidden lg:flex items-center gap-6 xl:gap-8 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
               {navLinks.slice(3).map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-sm tracking-widest uppercase transition-colors duration-300 relative group ${
+                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
                     isActive(link.href) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
