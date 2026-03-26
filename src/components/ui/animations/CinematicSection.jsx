@@ -152,10 +152,11 @@ export function CinematicSection({
   curtainDirection = 'up',
   showBlur = true,
   showParallax = true,
-  parallaxStrength = 0.3
+  parallaxStrength = 0.3,
+  animated = true
 }) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px 0px' })
+  const isInView = useInView(ref, { once: true, margin: '-50px 0px' })
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start']
@@ -174,6 +175,14 @@ export function CinematicSection({
   )
 
   const contentOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+
+  if (!animated) {
+    return (
+      <section ref={ref} className={`relative overflow-hidden ${className}`}>
+        {children}
+      </section>
+    )
+  }
 
   return (
     <section ref={ref} className={`relative overflow-hidden ${className}`}>
@@ -226,69 +235,5 @@ export function CinematicSection({
   )
 }
 
-// Main export
-export default function CinematicSection({
-  children,
-  backgroundImage,
-  className = '',
-  animated = true
-}) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px 0px' })
-
-  if (!animated) {
-    return (
-      <section ref={ref} className={className}>
-        {children}
-      </section>
-    )
-  }
-
-  return (
-    <section
-      ref={ref}
-      className={`relative overflow-hidden ${className}`}
-    >
-      {/* Background */}
-      {backgroundImage && (
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={isInView ? {
-            scale: 1,
-            opacity: 1,
-            transition: { duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }
-          } : {}}
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-            filter: 'brightness(0.35) saturate(1.2)'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
-        </motion.div>
-      )}
-
-      {/* Content with blur-to-clear */}
-      <motion.div
-        initial={{ filter: 'blur(15px)', opacity: 0, y: 30 }}
-        animate={isInView ? {
-          filter: 'blur(0px)',
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 1.2,
-            delay: 0.3,
-            ease: [0.25, 0.1, 0.25, 1]
-          }
-        } : {}}
-        className="relative z-10"
-      >
-        {children}
-      </motion.div>
-
-      {/* Gradient overlays */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent pointer-events-none z-10" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
-    </section>
-  )
-}
+// Default export is the same component
+export default CinematicSection
