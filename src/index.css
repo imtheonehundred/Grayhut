@@ -69,6 +69,11 @@
   .card-hover {
     @apply transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(212,175,55,0.2)];
   }
+
+  /* Radial gradient background */
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
 }
 
 @layer utilities {
@@ -81,4 +86,77 @@
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
   .animate-delay-500 { animation-delay: 500ms; }
+
+  /* Floating animation for parallax smoke effects */
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+    }
+  }
+
+  /* Smooth parallax scroll behavior */
+  .parallax-container {
+    perspective: 1000px;
+    overflow: hidden;
+  }
+
+  /* Hardware accelerated animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Blur animation for text reveal */
+  @keyframes blur-in {
+    from {
+      filter: blur(20px);
+      opacity: 0;
+    }
+    to {
+      filter: blur(0);
+      opacity: 1;
+    }
+  }
+
+  .blur-in {
+    animation: blur-in 1s ease-out forwards;
+  }
+
+  /* Scale reveal */
+  @keyframes scale-reveal {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .scale-reveal {
+    animation: scale-reveal 0.8s ease-out forwards;
+  }
+
+  /* Clip path reveal */
+  @keyframes clip-reveal-up {
+    from {
+      clip-path: inset(100% 0 0 0);
+    }
+    to {
+      clip-path: inset(0% 0 0 0);
+    }
+  }
+
+  .clip-reveal-up {
+    animation: clip-reveal-up 1.2s ease-out forwards;
+  }
 }
