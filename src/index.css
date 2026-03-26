@@ -95,7 +95,6 @@
   [dir="ltr"] .ltr\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
   }
-}
 
   /* Floating animation for parallax smoke effects */
   .animate-float {
