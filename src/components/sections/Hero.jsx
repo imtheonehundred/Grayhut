@@ -2,8 +2,11 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { AnimatedChars, AnimatedWords } from '../ui/animations'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../data/translations'
 
 export default function Hero() {
+  const { lang } = useLanguage()
   const ref = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -63,8 +66,8 @@ export default function Hero() {
         {/* Main background image */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=1920&q=80"
-            alt="Luxury Perfume"
+            src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=80"
+            alt="Luxury Cosmetics"
             className="w-full h-full object-cover"
           />
         </div>
@@ -80,14 +83,14 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none"
         style={{ y: smoke1Y }}
       >
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] animate-float" />
+        <div className="absolute top-1/4 start-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] animate-float" />
       </motion.div>
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ y: smoke2Y }}
       >
         <div
-          className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-[100px] animate-float"
+          className="absolute bottom-1/3 end-1/4 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-[100px] animate-float"
           style={{ animationDelay: '2s' }}
         />
       </motion.div>
@@ -98,7 +101,7 @@ export default function Hero() {
         style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']) }}
       >
         <div
-          className="absolute top-1/3 right-1/3 w-[200px] h-[200px] bg-accent/5 rounded-full blur-[60px] animate-float"
+          className="absolute top-1/3 end-1/3 w-[200px] h-[200px] bg-accent/5 rounded-full blur-[60px] animate-float"
           style={{ animationDelay: '1s' }}
         />
       </motion.div>
@@ -118,13 +121,13 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className="text-accent tracking-[0.4em] uppercase text-xs md:text-sm mb-8"
         >
-          Est. 1895 • Paris
+          {t('heroPreTitle', lang)}
         </motion.p>
 
         {/* Main Title with character animation */}
         <div className="mb-8 overflow-hidden">
           <AnimatedChars
-            text="Discover the"
+            text={t('heroTitle1', lang)}
             className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold text-white block"
             stagger={0.03}
           />
@@ -132,8 +135,16 @@ export default function Hero() {
 
         <div className="mb-16 overflow-hidden">
           <AnimatedWords
-            text="Essence of Luxury"
+            text={t('heroTitle2', lang)}
             className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold"
+            stagger={0.05}
+          />
+        </div>
+
+        <div className="mb-16 overflow-hidden">
+          <AnimatedWords
+            text={t('heroTitle3', lang)}
+            className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold gold-text"
             stagger={0.05}
           />
         </div>
@@ -145,9 +156,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           className="font-cormorant text-lg md:text-2xl text-gray-300 max-w-3xl mb-16 italic leading-relaxed"
         >
-          Exquisite fragrances crafted from the world's finest ingredients.
-          <br className="hidden md:block" />
-          Each scent tells a story of elegance and refinement.
+          {t('heroSubtitle', lang)}
         </motion.p>
 
         {/* CTA Button with magnetic effect */}
@@ -175,7 +184,7 @@ export default function Hero() {
 
             {/* Button Text */}
             <span className="relative text-primary font-semibold tracking-[0.2em] uppercase text-sm">
-              Shop Now
+              {t('shopNow', lang)}
             </span>
           </motion.button>
         </motion.div>
@@ -185,7 +194,7 @@ export default function Hero() {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isLoaded ? { scaleX: 1, opacity: 1 } : {}}
           transition={{ duration: 1.2, delay: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute bottom-32 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent"
+          className="absolute bottom-32 start-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent"
         />
       </motion.div>
 
@@ -194,7 +203,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 start-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 12, 0] }}
@@ -203,7 +212,7 @@ export default function Hero() {
           onClick={() => scrollToSection('featured')}
         >
           <span className="text-xs text-gray-400 tracking-[0.3em] uppercase mb-3">
-            Scroll
+            {lang === 'ar' ? 'تمرير' : 'Scroll'}
           </span>
           <ChevronDown size={20} className="text-accent" />
         </motion.div>
@@ -214,25 +223,25 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2.2, duration: 1 }}
-        className="absolute top-6 left-6 md:top-10 md:left-10 w-12 md:w-20 h-12 md:h-20 border-l border-t border-accent/40"
+        className="absolute top-6 start-6 md:top-10 md:start-10 w-12 md:w-20 h-12 md:h-20 border-s border-t border-accent/40"
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2.3, duration: 1 }}
-        className="absolute top-6 right-6 md:top-10 md:right-10 w-12 md:w-20 h-12 md:h-20 border-r border-t border-accent/40"
+        className="absolute top-6 end-6 md:top-10 md:end-10 w-12 md:w-20 h-12 md:h-20 border-e border-t border-accent/40"
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2.4, duration: 1 }}
-        className="absolute bottom-6 left-6 md:bottom-10 md:left-10 w-12 md:w-20 h-12 md:h-20 border-l border-b border-accent/40"
+        className="absolute bottom-6 start-6 md:bottom-10 md:start-10 w-12 md:w-20 h-12 md:h-20 border-s border-b border-accent/40"
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-6 right-6 md:bottom-10 md:right-10 w-12 md:w-20 h-12 md:h-20 border-r border-b border-accent/40"
+        className="absolute bottom-6 end-6 md:bottom-10 md:end-10 w-12 md:w-20 h-12 md:h-20 border-e border-b border-accent/40"
       />
     </section>
   )

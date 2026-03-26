@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import { categories } from '../../data/products';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 import CategoryCard from '../ui/CategoryCard';
 
 export default function Categories() {
+  const { lang } = useLanguage();
+
   return (
     <section id="categories" className="py-24 lg:py-32 px-6 lg:px-12 bg-gradient-to-b from-transparent via-secondary/10 to-transparent">
       <div className="max-w-7xl mx-auto">
@@ -16,12 +20,12 @@ export default function Categories() {
         >
           {/* Label */}
           <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            Explore Our World
+            {lang === 'ar' ? 'اكتشف منتجاتنا' : 'Explore Our Products'}
           </p>
 
           {/* Title */}
           <h2 className="section-title text-white mb-6">
-            Shop by <span className="gold-text">Category</span>
+            {t('categoriesTitle', lang)} <span className="gold-text">{lang === 'ar' ? 'والتسوق' : '& More'}</span>
           </h2>
 
           {/* Gold Lines */}

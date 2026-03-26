@@ -7,14 +7,14 @@ import { DataProvider } from './context/DataContext'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Hero from './components/sections/Hero'
-import FeaturedPerfumes from './components/sections/FeaturedPerfumes'
-import FeaturedMakeup from './components/sections/FeaturedMakeup'
+import FeaturedProducts from './components/sections/FeaturedProducts'
 import Categories from './components/sections/Categories'
 import SpecialOffer from './components/sections/SpecialOffer'
 import AboutBrand from './components/sections/AboutBrand'
 import Testimonials from './components/sections/Testimonials'
 import Newsletter from './components/sections/Newsletter'
 import CartDrawer from './components/ui/CartDrawer'
+import MakeupPage from './components/pages/MakeupPage'
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin'
@@ -41,13 +41,24 @@ function App() {
                 <Navbar />
                 <main>
                   <Hero />
-                  <FeaturedPerfumes />
-                  <FeaturedMakeup />
+                  <FeaturedProducts />
                   <Categories />
                   <SpecialOffer />
                   <AboutBrand />
                   <Testimonials />
                   <Newsletter />
+                </main>
+                <Footer />
+                <CartDrawer />
+              </>
+            } />
+
+            {/* Makeup Page */}
+            <Route path="/makeup" element={
+              <>
+                <Navbar />
+                <main>
+                  <MakeupPage />
                 </main>
                 <Footer />
                 <CartDrawer />

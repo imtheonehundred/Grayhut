@@ -4,13 +4,13 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('noir-cart');
+    const saved = localStorage.getItem('grayhut-cart');
     return saved ? JSON.parse(saved) : [];
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('noir-cart', JSON.stringify(cart));
+    localStorage.setItem('grayhut-cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product) => {

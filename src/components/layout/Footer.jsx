@@ -1,29 +1,27 @@
 import { motion } from 'framer-motion';
 import { Instagram, Facebook, Twitter, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
 
 export default function Footer() {
+  const { lang } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     shop: [
-      { name: 'New Arrivals', href: '#featured' },
-      { name: 'Best Sellers', href: '#featured' },
-      { name: 'For Him', href: '#categories' },
-      { name: 'For Her', href: '#categories' },
-      { name: 'Gift Sets', href: '#' },
+      { name: t('newArrivals', lang), href: '#featured' },
+      { name: t('bestSellers', lang), href: '#featured' },
+      { name: t('makeup', lang), href: '/makeup' },
+      { name: t('fragrance', lang), href: '#featured' },
     ],
     company: [
-      { name: 'Our Story', href: '#about' },
-      { name: 'Craftmanship', href: '#about' },
-      { name: 'Press', href: '#' },
-      { name: 'Careers', href: '#' },
+      { name: t('about', lang), href: '#about' },
+      { name: t('contact', lang), href: '#footer' },
     ],
     support: [
-      { name: 'Contact Us', href: '#' },
-      { name: 'FAQs', href: '#' },
-      { name: 'Shipping', href: '#' },
-      { name: 'Returns', href: '#' },
-      { name: 'Track Order', href: '#' },
+      { name: t('contact', lang), href: '#footer' },
+      { name: lang === 'ar' ? 'الشحن' : 'Shipping', href: '#' },
+      { name: lang === 'ar' ? 'الإرجاع' : 'Returns', href: '#' },
     ],
   };
 
@@ -48,33 +46,34 @@ export default function Footer() {
               className="mb-6"
             >
               <span className="font-playfair text-2xl font-semibold tracking-wider">
-                <span className="gold-text">NOIR</span>
-                <span className="text-white"> ESSENCE</span>
+                <span className="gold-text">Gray</span>
+                <span className="text-white">Hut</span>
               </span>
             </motion.div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-md">
-              Crafting extraordinary fragrances since 1895. Each scent is a masterpiece,
-              meticulously curated from the world's finest ingredients.
+              {lang === 'ar'
+                ? 'وجهتك الأولى لمستحضرات التجميل الفاخرة. نقدم لك أفضل المنتجات من أشهر الماركات العالمية.'
+                : 'Your premier destination for luxury cosmetics. We offer the best products from world-renowned brands.'}
             </p>
             <div className="space-y-3">
               <a href="#" className="flex items-center gap-3 text-gray-400 hover:text-accent transition-colors text-sm">
                 <MapPin size={16} />
-                <span>123 Luxury Avenue, Paris, France</span>
+                <span>{t('baghdad', lang)}</span>
               </a>
-              <a href="tel:+33123456789" className="flex items-center gap-3 text-gray-400 hover:text-accent transition-colors text-sm">
+              <a href="tel:+9647701234567" className="flex items-center gap-3 text-gray-400 hover:text-accent transition-colors text-sm">
                 <Phone size={16} />
-                <span>+33 1 23 45 67 89</span>
+                <span dir="ltr">+964 770 123 4567</span>
               </a>
-              <a href="mailto:concierge@noiressence.com" className="flex items-center gap-3 text-gray-400 hover:text-accent transition-colors text-sm">
+              <a href="mailto:info@grayhut.com" className="flex items-center gap-3 text-gray-400 hover:text-accent transition-colors text-sm">
                 <Mail size={16} />
-                <span>concierge@noiressence.com</span>
+                <span>info@grayhut.com</span>
               </a>
             </div>
           </div>
 
           {/* Shop Links */}
           <div>
-            <h4 className="font-playfair text-lg font-semibold text-white mb-4">Shop</h4>
+            <h4 className="font-playfair text-lg font-semibold text-white mb-4">{t('shopLinks', lang)}</h4>
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
                 <li key={link.name}>
@@ -91,7 +90,7 @@ export default function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-playfair text-lg font-semibold text-white mb-4">Company</h4>
+            <h4 className="font-playfair text-lg font-semibold text-white mb-4">{t('companyLinks', lang)}</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -108,7 +107,7 @@ export default function Footer() {
 
           {/* Support Links */}
           <div>
-            <h4 className="font-playfair text-lg font-semibold text-white mb-4">Support</h4>
+            <h4 className="font-playfair text-lg font-semibold text-white mb-4">{t('supportLinks', lang)}</h4>
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
@@ -143,7 +142,7 @@ export default function Footer() {
 
             {/* Copyright */}
             <p className="text-gray-500 text-sm">
-              © {currentYear} NOIR ESSENCE. All rights reserved.
+              © {currentYear} GrayHut. {t('rights', lang)}.
             </p>
 
             {/* Payment Icons */}
@@ -154,7 +153,7 @@ export default function Footer() {
               <span>•</span>
               <span>AMEX</span>
               <span>•</span>
-              <span>PAYPAL</span>
+              <span>PayPal</span>
             </div>
           </div>
         </div>

@@ -3,29 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, ShoppingBag, Trash2, Check, ChevronRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useData } from '../../context/DataContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
+import { formatPriceIQD } from '../../lib/utils';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function CartDrawer() {
   const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const { addOrder } = useData();
+  const { lang, dir } = useLanguage();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
-    email: '',
     phone: '',
-    address: {
-      street: '',
-      city: '',
-      state: '',
-      zip: '',
-      country: ''
-    }
+    address: ''
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handleCheckout = () => {
-    if (!customerInfo.name || !customerInfo.email) {
-      alert('Please fill in your name and email');
+    if (!customerInfo.name || !customerInfo.phone) {
+      alert(lang === 'ar' ? 'الرجاء ملء الاسم ورقم الهاتف' : 'Please fill in your name and phone');
       return;
     }
 
@@ -37,7 +34,7 @@ export default function CartDrawer() {
       shipping: 0,
       total: cartTotal,
       status: 'pending',
-      paymentMethod: 'card',
+      paymentMethod: 'cash',
       createdAt: new Date().toISOString()
     };
 
@@ -48,12 +45,7 @@ export default function CartDrawer() {
       setOrderPlaced(false);
       setIsCheckoutOpen(false);
       setIsCartOpen(false);
-      setCustomerInfo({
-        name: '',
-        email: '',
-        phone: '',
-        address: { street: '', city: '', state: '', zip: '', country: '' }
-      });
+      setCustomerInfo({ name: '', phone: '', address: '' });
     }, 3000);
   };
 
@@ -72,16 +64,16 @@ export default function CartDrawer() {
 
           {/* Drawer */}
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: dir === 'rtl' ? '-100%' : '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: dir === 'rtl' ? '-100%' : '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-primary border-l border-white/10 z-50 flex flex-col"
+            className={`fixed top-0 ${dir === 'rtl' ? 'left-0' : 'right-0'} bottom-0 w-full max-w-md bg-primary border-${dir === 'rtl' ? 'r' : 'l'} border-white/10 z-50 flex flex-col`}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10">
               <h2 className="font-playfair text-2xl font-semibold text-white">
-                {isCheckoutOpen ? 'Checkout' : 'Your Collection'}
+                {isCheckoutOpen ? t('checkoutTitle', lang) : t('yourCart', lang)}
               </h2>
               <button
                 onClick={() => {
@@ -107,96 +99,52 @@ export default function CartDrawer() {
                 >
                   <Check size={40} className="text-emerald-500" />
                 </motion.div>
-                <h3 className="font-playfair text-2xl text-white mb-2">Order Placed!</h3>
-                <p className="text-gray-400">Thank you for your purchase. You will receive a confirmation email shortly.</p>
+                <h3 className="font-playfair text-2xl text-white mb-2">
+                  {t('success', lang)}!
+                </h3>
+                <p className="text-gray-400">
+                  {lang === 'ar' ? 'شكراً لك! سيتم التواصل معك قريباً' : 'Thank you! We will contact you soon.'}
+                </p>
               </div>
             ) : isCheckoutOpen ? (
               /* Checkout Form */
               <div className="flex-1 overflow-y-auto p-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Name *</label>
+                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                      {t('name', lang)} *
+                    </label>
                     <input
                       type="text"
                       value={customerInfo.name}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                       className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                      placeholder="John Doe"
+                      placeholder={lang === 'ar' ? 'اسمك' : 'Your name'}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Email *</label>
-                    <input
-                      type="email"
-                      value={customerInfo.email}
-                      onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-                      className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Phone</label>
+                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                      {t('phone', lang)} *
+                    </label>
                     <input
                       type="tel"
                       value={customerInfo.phone}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                       className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder={lang === 'ar' ? '07712345678' : '+964 771 234 5678'}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Street Address</label>
-                    <input
-                      type="text"
-                      value={customerInfo.address.street}
-                      onChange={(e) => setCustomerInfo({ ...customerInfo, address: { ...customerInfo.address, street: e.target.value } })}
-                      className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                      placeholder="123 Main St"
+                    <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                      {t('address', lang)}
+                    </label>
+                    <textarea
+                      value={customerInfo.address}
+                      onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
+                      rows={3}
+                      className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none resize-none"
+                      placeholder={lang === 'ar' ? 'العنوان الكامل' : 'Full address in Baghdad'}
                     />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">City</label>
-                      <input
-                        type="text"
-                        value={customerInfo.address.city}
-                        onChange={(e) => setCustomerInfo({ ...customerInfo, address: { ...customerInfo.address, city: e.target.value } })}
-                        className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                        placeholder="New York"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">State</label>
-                      <input
-                        type="text"
-                        value={customerInfo.address.state}
-                        onChange={(e) => setCustomerInfo({ ...customerInfo, address: { ...customerInfo.address, state: e.target.value } })}
-                        className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                        placeholder="NY"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">ZIP Code</label>
-                      <input
-                        type="text"
-                        value={customerInfo.address.zip}
-                        onChange={(e) => setCustomerInfo({ ...customerInfo, address: { ...customerInfo.address, zip: e.target.value } })}
-                        className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                        placeholder="10001"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Country</label>
-                      <input
-                        type="text"
-                        value={customerInfo.address.country}
-                        onChange={(e) => setCustomerInfo({ ...customerInfo, address: { ...customerInfo.address, country: e.target.value } })}
-                        className="w-full bg-surface border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none"
-                        placeholder="United States"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -207,10 +155,10 @@ export default function CartDrawer() {
                   <div className="flex flex-col items-center justify-center h-full text-center">
                     <ShoppingBag size={64} className="text-gray-700 mb-4" />
                     <p className="text-gray-400 font-playfair text-xl mb-2">
-                      Your collection is empty
+                      {t('emptyCart', lang)}
                     </p>
                     <p className="text-gray-600 text-sm">
-                      Discover our exquisite fragrances
+                      {lang === 'ar' ? 'اكتشف منتجاتنا الفاخرة' : 'Discover our luxury products'}
                     </p>
                   </div>
                 ) : (
@@ -242,8 +190,8 @@ export default function CartDrawer() {
                             <h4 className="font-playfair text-lg text-white">
                               {item.product.name}
                             </h4>
-                            <p className="text-xs text-gray-400 mt-1">
-                              {item.product.notes?.top || item.product.category || 'Premium quality'}
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-1">
+                              {item.product.description}
                             </p>
                           </div>
 
@@ -269,7 +217,7 @@ export default function CartDrawer() {
 
                             {/* Price */}
                             <span className="gold-text font-semibold">
-                              ${item.product.price * item.quantity}
+                              {formatPriceIQD(item.product.price * item.quantity)}
                             </span>
                           </div>
                         </div>
@@ -291,10 +239,10 @@ export default function CartDrawer() {
             {/* Footer */}
             {cart.length > 0 && !orderPlaced && (
               <div className="p-6 border-t border-white/10 bg-surface/50">
-                {/* Subtotal */}
+                {/* Total */}
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-gray-400">Total</span>
-                  <span className="gold-text text-xl font-semibold">${cartTotal}</span>
+                  <span className="text-gray-400">{t('total', lang)}</span>
+                  <span className="gold-text text-xl font-semibold">{formatPriceIQD(cartTotal)}</span>
                 </div>
 
                 {isCheckoutOpen ? (
@@ -304,13 +252,13 @@ export default function CartDrawer() {
                       className="w-full btn-primary mb-3 flex items-center justify-center gap-2"
                     >
                       <Check size={18} />
-                      PLACE ORDER
+                      {t('placeOrder', lang)}
                     </button>
                     <button
                       onClick={() => setIsCheckoutOpen(false)}
                       className="w-full py-3 text-sm text-gray-400 hover:text-accent transition-colors tracking-wider uppercase"
                     >
-                      Back to Cart
+                      {t('continueShopping', lang)}
                     </button>
                   </>
                 ) : (
@@ -319,14 +267,14 @@ export default function CartDrawer() {
                       onClick={() => setIsCheckoutOpen(true)}
                       className="w-full btn-primary mb-3 flex items-center justify-center gap-2"
                     >
-                      PROCEED TO CHECKOUT
+                      {t('checkout', lang)}
                       <ChevronRight size={18} />
                     </button>
                     <button
                       onClick={() => setIsCartOpen(false)}
                       className="w-full py-3 text-sm text-gray-400 hover:text-accent transition-colors tracking-wider uppercase"
                     >
-                      Continue Shopping
+                      {t('continueShopping', lang)}
                     </button>
                   </>
                 )}

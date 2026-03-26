@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { products as defaultPerfumes, categories as defaultCategories, testimonials as defaultTestimonials } from '../data/products'
+import api from '../lib/api'
+import { products as defaultProducts } from '../data/products'
 
 const DataContext = createContext()
 
@@ -45,69 +46,75 @@ const DEFAULT_SITE_SETTINGS = {
 }
 
 export function DataProvider({ children }) {
-  // Perfumes
-  const [perfumes, setPerfumes] = useState(() => {
-    const saved = localStorage.getItem('noir-perfumes')
-    if (saved) {
+  const [perfumes, setPerfumes] = useState([])
+  const [makeup, setMakeup] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  // Fetch products from API
+  useEffect(() => {
+    const loadProducts = async () => {
       try {
-        return JSON.parse(saved)
-      } catch {
-        return defaultPerfumes
+        setLoading(true)
+        const products = await api.getProducts()
+        const perfumesData = products.filter(p => p.productType === 'perfume' || !p.productType)
+        const makeupData = products.filter(p => p.productType === 'makeup')
+        setPerfumes(perfumesData)
+        setMakeup(makeupData)
+        setError(null)
+      } catch (err) {
+        console.error('Failed to load products:', err)
+        setError(err.message)
+        // Fallback to localStorage first, then default products
+        const savedPerfumes = localStorage.getItem('grayhut-perfumes')
+        const savedMakeup = localStorage.getItem('grayhut-makeup')
+        if (savedPerfumes) {
+          setPerfumes(JSON.parse(savedPerfumes))
+        } else {
+          // Use default products as fallback
+          setPerfumes(defaultProducts.filter(p => !p.category || p.category !== 'makeup'))
+        }
+        if (savedMakeup) {
+          setMakeup(JSON.parse(savedMakeup))
+        } else {
+          setMakeup(defaultProducts.filter(p => p.category === 'makeup'))
+        }
+      } finally {
+        setLoading(false)
       }
     }
-    return defaultPerfumes
-  })
+    loadProducts()
+  }, [])
 
-  // Makeup
-  const [makeup, setMakeup] = useState(() => {
-    const saved = localStorage.getItem('noir-makeup')
-    return saved ? JSON.parse(saved) : []
-  })
-
-  // Categories
+  // Categories (localStorage for now)
   const [categories, setCategories] = useState(() => {
-    const saved = localStorage.getItem('noir-categories')
-    if (saved) {
-      try {
-        return JSON.parse(saved)
-      } catch {
-        return defaultCategories
-      }
-    }
-    return defaultCategories
-  })
-
-  // Testimonials
-  const [testimonials, setTestimonials] = useState(() => {
-    const saved = localStorage.getItem('noir-testimonials')
-    if (saved) {
-      try {
-        return JSON.parse(saved)
-      } catch {
-        return defaultTestimonials
-      }
-    }
-    return defaultTestimonials
-  })
-
-  // Orders
-  const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem('noir-orders')
+    const saved = localStorage.getItem('grayhut-categories')
     return saved ? JSON.parse(saved) : []
   })
 
-  // Site Settings
+  // Testimonials (localStorage for now)
+  const [testimonials, setTestimonials] = useState(() => {
+    const saved = localStorage.getItem('grayhut-testimonials')
+    return saved ? JSON.parse(saved) : []
+  })
+
+  // Orders (localStorage for now)
+  const [orders, setOrders] = useState(() => {
+    const saved = localStorage.getItem('grayhut-orders')
+    return saved ? JSON.parse(saved) : []
+  })
+
+  // Site Settings (localStorage for now)
   const [siteSettings, setSiteSettings] = useState(() => {
-    const saved = localStorage.getItem('noir-site-settings')
+    const saved = localStorage.getItem('grayhut-site-settings')
     return saved ? JSON.parse(saved) : DEFAULT_SITE_SETTINGS
   })
 
-  // Special Offer
+  // Special Offer (localStorage for now)
   const [specialOffer, setSpecialOffer] = useState(() => {
-    const saved = localStorage.getItem('noir-special-offer')
+    const saved = localStorage.getItem('grayhut-special-offer')
     if (saved) {
       const parsed = JSON.parse(saved)
-      // Set default countdown if none exists
       if (!parsed.countdownEndDate) {
         const countdownDate = new Date()
         countdownDate.setDate(countdownDate.getDate() + 7)
@@ -129,59 +136,88 @@ export function DataProvider({ children }) {
   })
 
   // Persist to localStorage
-  useEffect(() => { localStorage.setItem('noir-perfumes', JSON.stringify(perfumes)) }, [perfumes])
-  useEffect(() => { localStorage.setItem('noir-makeup', JSON.stringify(makeup)) }, [makeup])
-  useEffect(() => { localStorage.setItem('noir-categories', JSON.stringify(categories)) }, [categories])
-  useEffect(() => { localStorage.setItem('noir-testimonials', JSON.stringify(testimonials)) }, [testimonials])
-  useEffect(() => { localStorage.setItem('noir-orders', JSON.stringify(orders)) }, [orders])
-  useEffect(() => { localStorage.setItem('noir-site-settings', JSON.stringify(siteSettings)) }, [siteSettings])
-  useEffect(() => { localStorage.setItem('noir-special-offer', JSON.stringify(specialOffer)) }, [specialOffer])
+  useEffect(() => { localStorage.setItem('grayhut-categories', JSON.stringify(categories)) }, [categories])
+  useEffect(() => { localStorage.setItem('grayhut-testimonials', JSON.stringify(testimonials)) }, [testimonials])
+  useEffect(() => { localStorage.setItem('grayhut-orders', JSON.stringify(orders)) }, [orders])
+  useEffect(() => { localStorage.setItem('grayhut-site-settings', JSON.stringify(siteSettings)) }, [siteSettings])
+  useEffect(() => { localStorage.setItem('grayhut-special-offer', JSON.stringify(specialOffer)) }, [specialOffer])
 
-  // Perfume CRUD
-  const addPerfume = useCallback((perfume) => {
-    const newPerfume = {
-      ...perfume,
-      id: uuidv4(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+  // Perfume CRUD - API
+  const addPerfume = useCallback(async (perfume) => {
+    try {
+      const newPerfume = await api.createProduct({ ...perfume, productType: 'perfume' })
+      setPerfumes(prev => [newPerfume, ...prev])
+      return newPerfume
+    } catch (err) {
+      console.error('Failed to add perfume:', err)
+      // Fallback to local
+      const localPerfume = { ...perfume, id: uuidv4(), productType: 'perfume', createdAt: new Date().toISOString() }
+      setPerfumes(prev => [localPerfume, ...prev])
+      localStorage.setItem('grayhut-perfumes', JSON.stringify([localPerfume, ...perfumes]))
+      return localPerfume
     }
-    setPerfumes(prev => [...prev, newPerfume])
-    return newPerfume
-  }, [])
+  }, [perfumes])
 
-  const updatePerfume = useCallback((id, updates) => {
-    setPerfumes(prev => prev.map(p =>
-      p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p
-    ))
-  }, [])
-
-  const deletePerfume = useCallback((id) => {
-    setPerfumes(prev => prev.filter(p => p.id !== id))
-  }, [])
-
-  // Makeup CRUD
-  const addMakeup = useCallback((item) => {
-    const newItem = {
-      ...item,
-      id: uuidv4(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+  const updatePerfume = useCallback(async (id, updates) => {
+    try {
+      const updated = await api.updateProduct(id, updates)
+      setPerfumes(prev => prev.map(p => p.id === id ? updated : p))
+      return updated
+    } catch (err) {
+      console.error('Failed to update perfume:', err)
+      // Fallback to local
+      setPerfumes(prev => prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p))
     }
-    setMakeup(prev => [...prev, newItem])
-    return newItem
   }, [])
 
-  const updateMakeup = useCallback((id, updates) => {
-    setMakeup(prev => prev.map(m =>
-      m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m
-    ))
+  const deletePerfume = useCallback(async (id) => {
+    try {
+      await api.deleteProduct(id)
+      setPerfumes(prev => prev.filter(p => p.id !== id))
+    } catch (err) {
+      console.error('Failed to delete perfume:', err)
+      // Fallback to local
+      setPerfumes(prev => prev.filter(p => p.id !== id))
+    }
   }, [])
 
-  const deleteMakeup = useCallback((id) => {
-    setMakeup(prev => prev.filter(m => m.id !== id))
+  // Makeup CRUD - API
+  const addMakeup = useCallback(async (item) => {
+    try {
+      const newItem = await api.createProduct({ ...item, productType: 'makeup' })
+      setMakeup(prev => [newItem, ...prev])
+      return newItem
+    } catch (err) {
+      console.error('Failed to add makeup:', err)
+      // Fallback to local
+      const localMakeup = { ...item, id: uuidv4(), productType: 'makeup', createdAt: new Date().toISOString() }
+      setMakeup(prev => [localMakeup, ...prev])
+      return localMakeup
+    }
   }, [])
 
-  // Categories CRUD
+  const updateMakeup = useCallback(async (id, updates) => {
+    try {
+      const updated = await api.updateProduct(id, updates)
+      setMakeup(prev => prev.map(m => m.id === id ? updated : m))
+      return updated
+    } catch (err) {
+      console.error('Failed to update makeup:', err)
+      setMakeup(prev => prev.map(m => m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m))
+    }
+  }, [])
+
+  const deleteMakeup = useCallback(async (id) => {
+    try {
+      await api.deleteProduct(id)
+      setMakeup(prev => prev.filter(m => m.id !== id))
+    } catch (err) {
+      console.error('Failed to delete makeup:', err)
+      setMakeup(prev => prev.filter(m => m.id !== id))
+    }
+  }, [])
+
+  // Categories CRUD - Local
   const addCategory = useCallback((category) => {
     const newCategory = {
       ...category,
@@ -203,7 +239,7 @@ export function DataProvider({ children }) {
     setCategories(prev => prev.filter(c => c.id !== id))
   }, [])
 
-  // Testimonials CRUD
+  // Testimonials CRUD - Local
   const addTestimonial = useCallback((testimonial) => {
     const newTestimonial = {
       ...testimonial,
@@ -225,7 +261,7 @@ export function DataProvider({ children }) {
     setTestimonials(prev => prev.filter(t => t.id !== id))
   }, [])
 
-  // Orders
+  // Orders - Local
   const addOrder = useCallback((order) => {
     const newOrder = {
       ...order,
@@ -261,6 +297,7 @@ export function DataProvider({ children }) {
     <DataContext.Provider value={{
       // Data
       perfumes, makeup, categories, testimonials, orders, siteSettings, specialOffer, allProducts,
+      loading, error,
       // Perfume CRUD
       addPerfume, updatePerfume, deletePerfume,
       // Makeup CRUD

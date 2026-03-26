@@ -4,7 +4,7 @@ const AdminContext = createContext()
 
 export function AdminProvider({ children }) {
   const [adminUser, setAdminUser] = useState(() => {
-    const saved = localStorage.getItem('noir-admin-user')
+    const saved = localStorage.getItem('grayhut-admin-user')
     return saved ? JSON.parse(saved) : null
   })
   const [isLoading, setIsLoading] = useState(false)
@@ -12,9 +12,9 @@ export function AdminProvider({ children }) {
 
   useEffect(() => {
     if (adminUser) {
-      localStorage.setItem('noir-admin-user', JSON.stringify(adminUser))
+      localStorage.setItem('grayhut-admin-user', JSON.stringify(adminUser))
     } else {
-      localStorage.removeItem('noir-admin-user')
+      localStorage.removeItem('grayhut-admin-user')
     }
   }, [adminUser])
 

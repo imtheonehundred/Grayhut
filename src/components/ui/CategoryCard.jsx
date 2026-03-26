@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function CategoryCard({ category, index = 0 }) {
+  const { lang } = useLanguage();
+  const name = lang === 'ar' ? category.name : (category.nameEn || category.name);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -13,7 +17,7 @@ export default function CategoryCard({ category, index = 0 }) {
       {/* Background Image */}
       <motion.img
         src={category.image}
-        alt={category.name}
+        alt={name}
         className="absolute inset-0 w-full h-full object-cover"
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -35,7 +39,7 @@ export default function CategoryCard({ category, index = 0 }) {
 
         {/* Category Name */}
         <h3 className="font-playfair text-3xl md:text-4xl font-semibold text-white mb-3 group-hover:text-accent transition-colors duration-300">
-          {category.name}
+          {name}
         </h3>
 
         {/* Description */}
@@ -59,10 +63,10 @@ export default function CategoryCard({ category, index = 0 }) {
       />
 
       {/* Corner Accents */}
-      <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-      <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-      <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-      <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
+      <div className="absolute top-4 start-4 w-8 h-8 border-t-2 border-s-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
+      <div className="absolute top-4 end-4 w-8 h-8 border-t-2 border-e-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
+      <div className="absolute bottom-4 start-4 w-8 h-8 border-b-2 border-s-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
+      <div className="absolute bottom-4 end-4 w-8 h-8 border-b-2 border-e-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
     </motion.div>
   );
 }

@@ -1,221 +1,241 @@
+// Prices in Iraqi Dinar (IQD) - approximately 1 USD = 1,300 IQD
 export const products = [
   {
     id: 1,
-    name: "Midnight Noir",
-    brand: "NOIR ESSENCE",
-    price: 295,
-    originalPrice: 350,
-    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&q=80",
-    category: "luxury",
-    gender: "unisex",
-    notes: {
-      top: "Bergamot, Black Pepper",
-      middle: "Oud, Rose Absolute",
-      base: "Amber, Musk, Vanilla"
-    },
-    description: "A mysterious blend that captures the essence of midnight. Rich oud meets romantic rose, creating an unforgettable signature.",
+    name: "روج ماط طويل الأمد",
+    brand: "GrayHut",
+    price: 45000,
+    originalPrice: 58500,
+    image: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=600&q=80",
+    category: "makeup",
+    type: "lipstick",
+    description: "روج ماط فاخر يدوم حتى 24 ساعة مع لون غني",
     inStock: true,
     isFeatured: true,
     isNew: false
   },
   {
     id: 2,
-    name: "Velvet Orchid",
-    brand: "NOIR ESSENCE",
-    price: 245,
-    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80",
-    category: "women",
-    gender: "female",
-    notes: {
-      top: "Pink Pepper, Lychee",
-      middle: "Turkish Rose, Peony",
-      base: "Patchouli, White Musk"
-    },
-    description: "An elegant floral bouquet wrapped in sensual warmth. Perfect for the woman who commands attention effortlessly.",
+    name: "ماسكارا حجم مضاعف",
+    brand: "GrayHut",
+    price: 35000,
+    image: "https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=600&q=80",
+    category: "makeup",
+    type: "mascara",
+    description: "ماسكارا تمنحك رموشاً كثيفة ومظهراً درامياً",
     inStock: true,
     isFeatured: true,
     isNew: true
   },
   {
     id: 3,
-    name: "Royal Oud",
-    brand: "NOIR ESSENCE",
-    price: 450,
-    image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
-    category: "arabian",
-    gender: "male",
-    notes: {
-      top: "Saffron, Cardamom",
-      middle: "Rare Oud, Sandalwood",
-      base: "Amber, Leather"
-    },
-    description: "A masterpiece of Arabian perfumery. Rare oud wood aged to perfection, reserved for royalty.",
+    name: "كريم مرطب لليدين",
+    brand: "GrayHut",
+    price: 25000,
+    image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80",
+    category: "skincare",
+    type: "moisturizer",
+    description: "كريم مرطب غني بحليب الغنم وزبدة الشيا",
+    inStock: true,
+    isFeatured: false,
+    isNew: false
+  },
+  {
+    id: 4,
+    name: "عطر أوود ملكي",
+    brand: "GrayHut",
+    price: 125000,
+    originalPrice: 156000,
+    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80",
+    category: "fragrance",
+    type: "perfume",
+    description: "عطر فاخر برائحة أوود عربية أصيلة",
     inStock: true,
     isFeatured: true,
     isNew: false
   },
   {
-    id: 4,
-    name: "Citrus Dynasty",
-    brand: "NOIR ESSENCE",
-    price: 195,
-    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80",
-    category: "luxury",
-    gender: "male",
-    notes: {
-      top: "Lemon, Grapefruit, Bergamot",
-      middle: "Neroli, Orange Blossom",
-      base: "White Cedar, Sheer Musk"
-    },
-    description: "Fresh Mediterranean citrus elevated to regal heights. A sophisticated daytime scent for the modern gentleman.",
+    id: 5,
+    name: "شامبو بروتين الحرير",
+    brand: "GrayHut",
+    price: 18000,
+    image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=600&q=80",
+    category: "hair",
+    type: "shampoo",
+    description: "شامبو غني بالبروتينات لعلاج الشعر التالف",
     inStock: true,
     isFeatured: false,
     isNew: true
   },
   {
-    id: 5,
-    name: "Crimson Rose",
-    brand: "NOIR ESSENCE",
-    price: 275,
-    image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80",
-    category: "women",
-    gender: "female",
-    notes: {
-      top: "Raspberry, Pepper",
-      middle: "Damascus Rose, Peony",
-      base: "Patchouli, Soft Woods"
-    },
-    description: "A passionate embrace of Bulgarian roses. Deep, intoxicating, and utterly unforgettable.",
+    id: 6,
+    name: "سيروم فيتامين سي",
+    brand: "GrayHut",
+    price: 65000,
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80",
+    category: "skincare",
+    type: "serum",
+    description: "سيروم مشرق للبشرة بفيتامين سي المركز",
     inStock: true,
     isFeatured: true,
     isNew: false
   },
   {
-    id: 6,
-    name: "Desert Storm",
-    brand: "NOIR ESSENCE",
-    price: 320,
-    image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=600&q=80",
-    category: "arabian",
-    gender: "unisex",
-    notes: {
-      top: "Cardamom, Ginger",
-      middle: "Agarwood, Incense",
-      base: "Sandalwood, Benzoin"
-    },
-    description: "The spirit of Arabian nights captured in a bottle. Mysterious, warm, and utterly magnetic.",
-    inStock: true,
-    isFeatured: false,
-    isNew: false
-  },
-  {
     id: 7,
-    name: "Silk & Smoke",
-    brand: "NOIR ESSENCE",
-    price: 285,
-    image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&q=80",
-    category: "luxury",
-    gender: "unisex",
-    notes: {
-      top: "Whiskey, Saffron",
-      middle: "Iris, Tobacco",
-      base: "Leather, Myrrh"
-    },
-    description: "An opulent dance of smoky iris and aged leather. For those who appreciate the finer things.",
+    name: "باليت ظلال العيون",
+    brand: "GrayHut",
+    price: 75000,
+    originalPrice: 91000,
+    image: "https://images.unsplash.com/photo-1583241800698-e8ab01830a07?w=600&q=80",
+    category: "makeup",
+    type: "eyeshadow",
+    description: "باليت ظلال عيون بـ 12 درجة من الألوان النude",
     inStock: true,
     isFeatured: true,
     isNew: false
   },
   {
     id: 8,
-    name: "Golden Elixir",
-    brand: "NOIR ESSENCE",
-    price: 395,
-    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&q=80",
-    category: "luxury",
-    gender: "unisex",
-    notes: {
-      top: "Mandarin, Frankincense",
-      middle: "Jasmine, Ylang Ylang",
-      base: "Vanilla, Gold Amber"
-    },
-    description: "Liquid gold for the skin. A radiant blend that exudes wealth and sophistication.",
+    name: "بودرة ثابتة للوجه",
+    brand: "GrayHut",
+    price: 38000,
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80",
+    category: "makeup",
+    type: "foundation",
+    description: "بودرة ثابتة تمنحك مظهراً ماتٍ مثالياً",
     inStock: true,
     isFeatured: false,
     isNew: true
+  },
+  {
+    id: 9,
+    name: "زيت الشعر المغذي",
+    brand: "GrayHut",
+    price: 28000,
+    image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80",
+    category: "hair",
+    type: "oil",
+    description: "زيت مغذي للعناية بالشعر الجاف والتالف",
+    inStock: true,
+    isFeatured: false,
+    isNew: false
+  },
+  {
+    id: 10,
+    name: "عطر فلورالة باريس",
+    brand: "GrayHut",
+    price: 95000,
+    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&q=80",
+    category: "fragrance",
+    type: "perfume",
+    description: "عطر أنثوي برائحة زهربية فرنسية كلاسيكية",
+    inStock: true,
+    isFeatured: true,
+    isNew: false
+  },
+  {
+    id: 11,
+    name: "كريم واقي من الشمس",
+    brand: "GrayHut",
+    price: 42000,
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80",
+    category: "skincare",
+    type: "sunscreen",
+    description: "كريم واقي SPF 50 لحماية البشرة من الشمس",
+    inStock: true,
+    isFeatured: false,
+    isNew: true
+  },
+  {
+    id: 12,
+    name: "مزيل عرق ستارك",
+    brand: "GrayHut",
+    price: 15000,
+    image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?w=600&q=80",
+    category: "body",
+    type: "deodorant",
+    description: "مزيل عرق يدوم 48 ساعة برائحة منعشة",
+    inStock: true,
+    isFeatured: false,
+    isNew: false
   }
 ];
 
 export const categories = [
   {
     id: 1,
-    name: "For Him",
-    slug: "men",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
-    description: "Bold, distinctive scents"
+    name: "المكياج",
+    nameEn: "Makeup",
+    slug: "makeup",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80",
+    description: "روج، ظلال عيون، ماسكارا والمزيد"
   },
   {
     id: 2,
-    name: "For Her",
-    slug: "women",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
-    description: "Elegant, captivating fragrances"
+    name: "العناية بالبشرة",
+    nameEn: "Skincare",
+    slug: "skincare",
+    image: "https://images.unsplash.com/photo-1570194065650-d99fb4b38b15?w=800&q=80",
+    description: "مرطبات، سيرومات، واقيات شمس"
   },
   {
     id: 3,
-    name: "Unisex",
-    slug: "unisex",
-    image: "https://images.unsplash.com/photo-1519764622345-23439dd774f7?w=800&q=80",
-    description: "Beyond boundaries"
+    name: "العناية بالشعر",
+    nameEn: "Hair Care",
+    slug: "hair",
+    image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=800&q=80",
+    description: "شامبو، بلسم، زيت للشعر"
   },
   {
     id: 4,
-    name: "Arabian",
-    slug: "arabian",
-    image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=800&q=80",
-    description: "Rare oud & incense"
+    name: "العطور",
+    nameEn: "Fragrance",
+    slug: "fragrance",
+    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80",
+    description: "عطور فاخرة وأوود عربية"
   },
   {
     id: 5,
-    name: "Luxury Exclusive",
-    slug: "luxury",
-    image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=800&q=80",
-    description: "Limited editions"
+    name: "العناية بالجسم",
+    nameEn: "Body Care",
+    slug: "body",
+    image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80",
+    description: "مزيلات عرق، لوشن الجسم"
   }
 ];
 
 export const testimonials = [
   {
     id: 1,
-    name: "Alexandra Sterling",
-    title: "Fashion Editor, Vogue",
+    name: "سارة محمد",
+    title: "مهندسة، بغداد",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
     rating: 5,
-    text: "NOIR ESSENCE has completely transformed my perception of luxury fragrances. The Velvet Orchid is my signature scent now - absolutely intoxicating."
+    text: "منتجات GrayHut ممتازة! كريم المرطب غيّر بشرتي تماماً. أنصح بها الجميع."
   },
   {
     id: 2,
-    name: "James Chen",
-    title: "CEO, Meridian Holdings",
+    name: "أحمد خليل",
+    title: "صيدلي، البصرة",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
     rating: 5,
-    text: "The Royal Oud is unparalleled in its complexity and longevity. I receive compliments every single time I wear it. Worth every penny."
+    text: "عطر الأوود الملكي لا يُقاوم. رائحة فاخرة تدوم طويلاً. أفضل عطر استخدمته."
   },
   {
     id: 3,
-    name: "Isabella Martinez",
-    title: "Luxury Lifestyle Influencer",
+    name: "نور الدين",
+    title: "رائد أعمال، أربيل",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80",
     rating: 5,
-    text: "From the elegant packaging to the exquisite scent, everything about NOIR ESSENCE screams luxury. Their Midnight Noir is simply divine."
+    text: "خدمة ممتازة ومنتجات أصلية 100%. الشحن كان سريعاً أيضاً. شكراً GrayHut!"
   },
   {
     id: 4,
-    name: "Victoria Laurent",
-    title: "Creative Director",
+    name: "زينب العلي",
+    title: "طبيبة، النجف",
     image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80",
     rating: 5,
-    text: "I've worn luxury perfumes my entire adult life. NOIR ESSENCE surpasses many of the prestigious houses I once favored. Exquisite quality."
+    text: "باليت الظلال رائع والألوان很漂亮. مكياجي الآن يبدو احترافياً!"
   }
 ];
 

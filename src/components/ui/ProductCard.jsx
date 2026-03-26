@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Eye } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../data/translations';
+import { formatPriceIQD } from '../../lib/utils';
 
 export default function ProductCard({ product, index = 0 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
   const { addToCart } = useCart();
+  const { lang } = useLanguage();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -51,15 +55,15 @@ export default function ProductCard({ product, index = 0 }) {
           />
 
           {/* Badges */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <div className="absolute top-4 start-4 flex flex-col gap-2">
             {product.isNew && (
               <span className="px-3 py-1 bg-accent text-primary text-xs font-semibold tracking-wider">
-                NEW
+                {t('new', lang)}
               </span>
             )}
             {product.originalPrice && (
               <span className="px-3 py-1 bg-secondary text-white text-xs font-semibold tracking-wider">
-                SALE
+                {t('sale', lang)}
               </span>
             )}
           </div>
@@ -72,7 +76,7 @@ export default function ProductCard({ product, index = 0 }) {
               y: isHovered ? 0 : 20
             }}
             transition={{ duration: 0.3 }}
-            className="absolute top-4 right-4 flex flex-col gap-2"
+            className="absolute top-4 end-4 flex flex-col gap-2"
           >
             <button className="p-3 bg-surface/80 backdrop-blur-sm rounded-full text-gray-300 hover:text-accent hover:bg-surface transition-colors">
               <Eye size={18} strokeWidth={1.5} />
@@ -87,22 +91,22 @@ export default function ProductCard({ product, index = 0 }) {
               y: isHovered ? 0 : 30
             }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-4 left-4 right-4"
+            className="absolute bottom-4 start-4 end-4"
           >
             <button
               onClick={handleAddToCart}
-              className={`w-full py-3 flex items-center justify-center gap-2 font-semibold text-sm tracking-wider uppercase transition-all duration-300 ${
+              className={`w-full py-3 flex items-center justify-center gap-2 font-semibold text-sm tracking-wider transition-all duration-300 ${
                 isAdded
                   ? 'bg-green-500 text-white'
                   : 'bg-accent text-primary hover:bg-yellow-400'
               }`}
             >
               {isAdded ? (
-                'ADDED'
+                t('success', lang)
               ) : (
                 <>
                   <ShoppingBag size={16} />
-                  ADD TO CART
+                  {t('addToCart', lang)}
                 </>
               )}
             </button>
@@ -121,19 +125,19 @@ export default function ProductCard({ product, index = 0 }) {
             {product.name}
           </h3>
 
-          {/* Notes */}
-          <p className="text-xs text-gray-400 mb-4 line-clamp-1">
-            {product.notes.top}
+          {/* Description */}
+          <p className="text-xs text-gray-400 mb-4 line-clamp-2">
+            {product.description}
           </p>
 
           {/* Price */}
           <div className="flex items-center gap-3">
             <span className="gold-text font-semibold text-lg">
-              ${product.price}
+              {formatPriceIQD(product.price)}
             </span>
             {product.originalPrice && (
               <span className="text-gray-500 line-through text-sm">
-                ${product.originalPrice}
+                {formatPriceIQD(product.originalPrice)}
               </span>
             )}
           </div>
