@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Check, Image as ImageIcon, MessageCircle, AlertCircle } from 'lucide-react'
 import { useData } from '../../../context/DataContext'
 
@@ -53,7 +52,6 @@ export default function SiteSettings() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Save both site settings and WhatsApp settings
     updateSiteSettings({ ...formData, whatsapp: whatsappData })
     updateWhatsappSettings(whatsappData)
     alert('Settings saved successfully!')
@@ -90,22 +88,14 @@ export default function SiteSettings() {
   return (
     <div>
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-6"
-      >
+      <div className="mb-6">
         <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl font-semibold text-white">Site Settings</h1>
         <p className="text-gray-400 text-sm mt-1">Customize your website content</p>
-      </motion.div>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
-        >
+        <div className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl">
           <h2 className="font-playfair text-base sm:text-lg text-white mb-4">Hero Section</h2>
 
           <div className="space-y-4">
@@ -155,15 +145,10 @@ export default function SiteSettings() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* About Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
-        >
+        <div className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl">
           <h2 className="font-playfair text-base sm:text-lg text-white mb-4">About Section</h2>
 
           <div className="space-y-4">
@@ -233,15 +218,10 @@ export default function SiteSettings() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
-        >
+        <div className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl">
           <h2 className="font-playfair text-base sm:text-lg text-white mb-4">Newsletter Section</h2>
 
           <div className="space-y-4">
@@ -287,15 +267,10 @@ export default function SiteSettings() {
               />
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Footer Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
-        >
+        <div className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl">
           <h2 className="font-playfair text-base sm:text-lg text-white mb-4">Footer</h2>
 
           <div className="space-y-4">
@@ -363,15 +338,10 @@ export default function SiteSettings() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* WhatsApp Integration */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
-        >
+        <div className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl">
           <div className="flex items-center gap-3 mb-4">
             <MessageCircle size={20} className="text-emerald-500" />
             <h2 className="font-playfair text-base sm:text-lg text-white">WhatsApp Integration</h2>
@@ -436,7 +406,7 @@ export default function SiteSettings() {
                   />
                 </div>
 
-                {/* Business Phone (for reference) */}
+                {/* Business Phone */}
                 <div>
                   <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Business Phone Number</label>
                   <input
@@ -497,20 +467,15 @@ export default function SiteSettings() {
               </>
             )}
           </div>
-        </motion.div>
+        </div>
 
         {/* Save Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col sm:flex-row justify-end gap-3"
-        >
+        <div className="flex flex-col sm:flex-row justify-end gap-3">
           <button type="submit" className="btn-primary w-full sm:w-auto py-3 flex items-center justify-center gap-2">
             <Check size={16} />
             Save All Settings
           </button>
-        </motion.div>
+        </div>
       </form>
     </div>
   )
