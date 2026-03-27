@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ShoppingBag, ChevronRight } from 'lucide-react'
+import { ShoppingBag, ChevronRight, MessageCircle } from 'lucide-react'
 import { useData } from '../../../context/DataContext'
+import { sendOrderWhatsApp } from '../../../lib/whatsapp'
 
 export default function OrdersManagement() {
-  const { orders, updateOrderStatus } = useData()
+  const { orders, updateOrderStatus, siteSettings } = useData()
+  const [sendingWhatsApp, setSendingWhatsApp] = useState(null) // orderId being sent
 
   const statusOptions = [
     { value: 'pending', label: 'Pending', color: 'amber' },
@@ -18,8 +21,34 @@ export default function OrdersManagement() {
     return statusInfo?.color || 'gray'
   }
 
-  const handleStatusChange = (orderId, newStatus) => {
+  const handleStatusChange = async (orderId, newStatus) => {
+    // Update order status first
     updateOrderStatus(orderId, newStatus)
+
+    // Get the order
+    const order = orders.find(o => o.id === orderId)
+    if (!order) return
+
+    // Send WhatsApp notification for certain statuses
+    const whatsappSettings = siteSettings?.whatsapp
+    if (whatsappSettings?.enabled) {
+      // Map our status to WhatsApp template status
+      const whatsappStatusMap = {
+        processing: 'preparing',
+        delivered: 'delivered'
+      }
+
+      const whatsappStatus = whatsappStatusMap[newStatus]
+      if (whatsappStatus) {
+        setSendingWhatsApp(orderId)
+        try {
+          await sendOrderWhatsApp({ settings: whatsappSettings, order, status: whatsappStatus })
+        } catch (error) {
+          console.error('Failed to send WhatsApp notification:', error)
+        }
+        setSendingWhatsApp(null)
+      }
+    }
   }
 
   return (

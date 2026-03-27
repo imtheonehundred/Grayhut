@@ -7,10 +7,11 @@ import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
 import { formatPriceIQD } from '../../lib/utils';
 import { v4 as uuidv4 } from 'uuid';
+import { sendOrderWhatsApp } from '../../lib/whatsapp';
 
 export default function CartDrawer() {
   const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
-  const { addOrder } = useData();
+  const { addOrder, siteSettings } = useData();
   const { lang, dir } = useLanguage();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
@@ -19,8 +20,9 @@ export default function CartDrawer() {
     address: ''
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [isSendingWhatsApp, setIsSendingWhatsApp] = useState(false);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!customerInfo.name || !customerInfo.phone) {
       alert(lang === 'ar' ? 'الرجاء ملء الاسم ورقم الهاتف' : 'Please fill in your name and phone');
       return;
@@ -38,8 +40,22 @@ export default function CartDrawer() {
       createdAt: new Date().toISOString()
     };
 
+    // Add order to localStorage/DB
     addOrder(order);
     setOrderPlaced(true);
+
+    // Send WhatsApp notification
+    const whatsappSettings = siteSettings?.whatsapp;
+    if (whatsappSettings?.enabled) {
+      setIsSendingWhatsApp(true);
+      try {
+        await sendOrderWhatsApp({ settings: whatsappSettings, order, status: 'received' });
+      } catch (error) {
+        console.error('WhatsApp notification failed:', error);
+      }
+      setIsSendingWhatsApp(false);
+    }
+
     setTimeout(() => {
       clearCart();
       setOrderPlaced(false);
@@ -102,9 +118,14 @@ export default function CartDrawer() {
                 <h3 className="font-playfair text-2xl text-white mb-2">
                   {t('success', lang)}!
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-gray-400 mb-2">
                   {lang === 'ar' ? 'شكراً لك! سيتم التواصل معك قريباً' : 'Thank you! We will contact you soon.'}
                 </p>
+                {isSendingWhatsApp && (
+                  <p className="text-xs text-emerald-400">
+                    {lang === 'ar' ? 'جاري إرسال إشعار واتساب...' : 'Sending WhatsApp notification...'}
+                  </p>
+                )}
               </div>
             ) : isCheckoutOpen ? (
               /* Checkout Form */

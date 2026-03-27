@@ -120,6 +120,21 @@ export function DataProvider({ children }) {
     return saved ? JSON.parse(saved) : []
   })
 
+  // WhatsApp Settings (localStorage for now)
+  const [whatsappSettings, setWhatsappSettings] = useState(() => {
+    const saved = localStorage.getItem('grayhut-whatsapp-settings')
+    return saved ? JSON.parse(saved) : {
+      enabled: false,
+      accessToken: '',
+      phoneNumberId: '',
+      businessPhone: '',
+      orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+      orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
+      orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.',
+      updatedAt: new Date().toISOString()
+    }
+  })
+
   // Site Settings (localStorage for now)
   const [siteSettings, setSiteSettings] = useState(() => {
     const saved = localStorage.getItem('grayhut-site-settings')
@@ -157,6 +172,7 @@ export function DataProvider({ children }) {
   useEffect(() => { localStorage.setItem('grayhut-orders', JSON.stringify(orders)) }, [orders])
   useEffect(() => { localStorage.setItem('grayhut-site-settings', JSON.stringify(siteSettings)) }, [siteSettings])
   useEffect(() => { localStorage.setItem('grayhut-special-offer', JSON.stringify(specialOffer)) }, [specialOffer])
+  useEffect(() => { localStorage.setItem('grayhut-whatsapp-settings', JSON.stringify(whatsappSettings)) }, [whatsappSettings])
 
   // Perfume CRUD - API with refresh
   const addPerfume = useCallback(async (perfume) => {
@@ -296,6 +312,11 @@ export function DataProvider({ children }) {
     ))
   }, [])
 
+  // WhatsApp Settings
+  const updateWhatsappSettings = useCallback((updates) => {
+    setWhatsappSettings(prev => ({ ...prev, ...updates, updatedAt: new Date().toISOString() }))
+  }, [])
+
   // Site Settings
   const updateSiteSettings = useCallback((updates) => {
     setSiteSettings(prev => ({ ...prev, ...updates, updatedAt: new Date().toISOString() }))
@@ -313,6 +334,7 @@ export function DataProvider({ children }) {
     <DataContext.Provider value={{
       // Data
       perfumes, makeup, categories, testimonials, orders, siteSettings, specialOffer, allProducts,
+      whatsappSettings,
       loading, error,
       // Refresh function
       refreshProducts: fetchProducts,
@@ -327,7 +349,7 @@ export function DataProvider({ children }) {
       // Orders
       addOrder, updateOrderStatus,
       // Settings
-      updateSiteSettings, updateSpecialOffer,
+      updateSiteSettings, updateSpecialOffer, updateWhatsappSettings,
       // Defaults
       DEFAULT_SITE_SETTINGS
     }}>

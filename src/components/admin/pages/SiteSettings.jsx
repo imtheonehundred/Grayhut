@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Check, Image as ImageIcon } from 'lucide-react'
+import { Check, Image as ImageIcon, MessageCircle, AlertCircle } from 'lucide-react'
 import { useData } from '../../../context/DataContext'
 
 export default function SiteSettings() {
-  const { siteSettings, updateSiteSettings } = useData()
+  const { siteSettings, updateSiteSettings, updateWhatsappSettings } = useData()
+
+  // WhatsApp settings from siteSettings (stored there for simplicity)
+  const existingWhatsapp = siteSettings.whatsapp || {}
 
   const [formData, setFormData] = useState({
     hero: {
@@ -41,9 +44,21 @@ export default function SiteSettings() {
     }
   })
 
+  const [whatsappData, setWhatsappData] = useState({
+    enabled: existingWhatsapp.enabled || false,
+    accessToken: existingWhatsapp.accessToken || '',
+    phoneNumberId: existingWhatsapp.phoneNumberId || '',
+    businessPhone: existingWhatsapp.businessPhone || '',
+    orderReceivedTemplate: existingWhatsapp.orderReceivedTemplate || 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+    orderPreparingTemplate: existingWhatsapp.orderPreparingTemplate || 'Your order #{order_id} is now being prepared.',
+    orderDeliveredTemplate: existingWhatsapp.orderDeliveredTemplate || 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
+  })
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    updateSiteSettings(formData)
+    // Save both site settings and WhatsApp settings
+    updateSiteSettings({ ...formData, whatsapp: whatsappData })
+    updateWhatsappSettings(whatsappData)
     alert('Settings saved successfully!')
   }
 
@@ -350,6 +365,140 @@ export default function SiteSettings() {
                 />
               </div>
             </div>
+          </div>
+        </motion.div>
+
+        {/* WhatsApp Integration */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="bg-surface border border-white/5 p-4 md:p-6 rounded-xl"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <MessageCircle size={20} className="text-emerald-500" />
+            <h2 className="font-playfair text-base sm:text-lg text-white">WhatsApp Integration</h2>
+            {whatsappData.enabled && (
+              <span className="px-2 py-1 text-xs bg-emerald-500/20 text-emerald-400 rounded-full">
+                Active
+              </span>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            {/* Enable Toggle */}
+            <div className="flex items-center gap-3">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={whatsappData.enabled}
+                  onChange={(e) => setWhatsappData({ ...whatsappData, enabled: e.target.checked })}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-emerald-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+              </label>
+              <span className="text-sm text-gray-400">Enable WhatsApp Notifications</span>
+            </div>
+
+            {whatsappData.enabled && (
+              <>
+                {/* Info Box */}
+                <div className="flex gap-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <AlertCircle size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-blue-300">
+                    <p className="mb-1">To get your WhatsApp credentials:</p>
+                    <ol className="list-decimal list-inside space-y-1">
+                      <li>Go to <a href="https://developers.facebook.com" target="_blank" rel="noopener noreferrer" className="underline">developers.facebook.com</a></li>
+                      <li>Create a WhatsApp Business app</li>
+                      <li>Get your Permanent Access Token and Phone Number ID</li>
+                    </ol>
+                  </div>
+                </div>
+
+                {/* Access Token */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Access Token</label>
+                  <input
+                    type="password"
+                    value={whatsappData.accessToken}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, accessToken: e.target.value })}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none rounded-lg"
+                    placeholder="EAAGXXXX... (your permanent access token)"
+                  />
+                </div>
+
+                {/* Phone Number ID */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Phone Number ID</label>
+                  <input
+                    type="text"
+                    value={whatsappData.phoneNumberId}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, phoneNumberId: e.target.value })}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none rounded-lg"
+                    placeholder="123456789012345"
+                  />
+                </div>
+
+                {/* Business Phone (for reference) */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">Business Phone Number</label>
+                  <input
+                    type="tel"
+                    value={whatsappData.businessPhone}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, businessPhone: e.target.value })}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none rounded-lg"
+                    placeholder="+964 770 123 4567"
+                  />
+                </div>
+
+                <hr className="border-white/5 my-4" />
+
+                <h3 className="font-playfair text-sm text-white mb-3">Message Templates</h3>
+
+                {/* Order Received Template */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                    Order Received Message
+                  </label>
+                  <textarea
+                    value={whatsappData.orderReceivedTemplate}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, orderReceivedTemplate: e.target.value })}
+                    rows={2}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none resize-none rounded-lg"
+                    placeholder="Order #{order_id} received! Thank you {customer_name}."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Use {'{order_id}'} and {'{customer_name}'} as variables</p>
+                </div>
+
+                {/* Order Preparing Template */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                    Order Preparing Message
+                  </label>
+                  <textarea
+                    value={whatsappData.orderPreparingTemplate}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, orderPreparingTemplate: e.target.value })}
+                    rows={2}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none resize-none rounded-lg"
+                    placeholder="Your order #{order_id} is now being prepared."
+                  />
+                </div>
+
+                {/* Order Delivered Template */}
+                <div>
+                  <label className="block text-xs text-gray-400 tracking-widest uppercase mb-2">
+                    Order Delivered Message
+                  </label>
+                  <textarea
+                    value={whatsappData.orderDeliveredTemplate}
+                    onChange={(e) => setWhatsappData({ ...whatsappData, orderDeliveredTemplate: e.target.value })}
+                    rows={2}
+                    className="w-full bg-primary border border-white/10 px-4 py-3 text-white focus:border-accent/50 focus:outline-none resize-none rounded-lg"
+                    placeholder="Your order #{order_id} has been delivered! Thank you for shopping with us."
+                  />
+                </div>
+              </>
+            )}
           </div>
         </motion.div>
 
