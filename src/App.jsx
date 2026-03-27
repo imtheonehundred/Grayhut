@@ -17,6 +17,7 @@ import Newsletter from './components/sections/Newsletter'
 import CartDrawer from './components/ui/CartDrawer'
 import MakeupPage from './components/pages/MakeupPage'
 import ProductsPage from './components/pages/ProductsPage'
+import { useParams } from 'react-router-dom'
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin'
@@ -38,6 +39,21 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
   return null;
+}
+
+// Wrapper to force ProductsPage remount on category change
+function ProductsPageWrapper() {
+  const { category } = useParams();
+  return (
+    <>
+      <Navbar />
+      <main>
+        <ProductsPage key={category || 'all'} />
+      </main>
+      <Footer />
+      <CartDrawer />
+    </>
+  );
 }
 
 function App() {
@@ -80,14 +96,7 @@ function App() {
 
             {/* Products by Category */}
             <Route path="/category/:category" element={
-              <>
-                <Navbar />
-                <main>
-                  <ProductsPage />
-                </main>
-                <Footer />
-                <CartDrawer />
-              </>
+              <ProductsPageWrapper />
             } />
 
             {/* Admin Login */}
