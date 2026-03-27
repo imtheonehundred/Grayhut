@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Search, X } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
 
@@ -14,35 +13,6 @@ export default function SearchFilter({ products, onFilter }) {
     sortBy: 'default',
   });
 
-  const categories = [
-    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
-    { value: 'makeup', label: lang === 'ar' ? 'مكياج' : 'Makeup' },
-    { value: 'skincare', label: lang === 'ar' ? 'عناية بالبشرة' : 'Skincare' },
-    { value: 'hair', label: lang === 'ar' ? 'شعر' : 'Hair' },
-    { value: 'fragrance', label: lang === 'ar' ? 'عطور' : 'Fragrance' },
-    { value: 'body', label: lang === 'ar' ? 'جسم' : 'Body' },
-  ];
-
-  const types = [
-    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
-    { value: 'lipstick', label: 'Lipstick' },
-    { value: 'mascara', label: 'Mascara' },
-    { value: 'eyeshadow', label: 'Eyeshadow' },
-    { value: 'foundation', label: 'Foundation' },
-    { value: 'serum', label: 'Serum' },
-    { value: 'moisturizer', label: 'Moisturizer' },
-    { value: 'shampoo', label: 'Shampoo' },
-    { value: 'perfume', label: 'Perfume' },
-  ];
-
-  const priceRanges = [
-    { value: 'all', label: lang === 'ar' ? 'الكل' : 'All Prices' },
-    { value: '0-30000', label: lang === 'ar' ? 'أقل من 30,000' : 'Under 30,000' },
-    { value: '30000-60000', label: lang === 'ar' ? '30,000 - 60,000' : '30,000 - 60,000' },
-    { value: '60000-100000', label: lang === 'ar' ? '60,000 - 100,000' : '60,000 - 100,000' },
-    { value: '100000+', label: lang === 'ar' ? 'أكثر من 100,000' : '100,000+' },
-  ];
-
   const sortOptions = [
     { value: 'default', label: lang === 'ar' ? 'مميز' : 'Featured' },
     { value: 'price-low', label: lang === 'ar' ? 'السعر للأقل' : 'Price: Low' },
@@ -50,8 +20,7 @@ export default function SearchFilter({ products, onFilter }) {
     { value: 'name', label: lang === 'ar' ? 'الاسم' : 'Name' },
   ];
 
-  // Apply filters automatically when any filter or search changes
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...products];
 
     if (searchQuery) {
@@ -92,12 +61,12 @@ export default function SearchFilter({ products, onFilter }) {
     }
 
     onFilter(filtered);
-  };
+  }, [products, searchQuery, filters, onFilter]);
 
-  // Auto-apply filters when state changes
+  // Apply filters when state changes
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, filters, products]);
+  }, [applyFilters]);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -113,7 +82,6 @@ export default function SearchFilter({ products, onFilter }) {
 
   return (
     <div className="mb-8">
-      {/* Search & Filter Row - Clean Sephora Style */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search size={18} className={`absolute ${lang === 'ar' ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 text-gray-500`} />

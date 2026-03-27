@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -10,9 +10,10 @@ export default function FeaturedProducts() {
   const navigate = useNavigate();
   const { perfumes } = useData();
   const { lang } = useLanguage();
-  const [filteredProducts, setFilteredProducts] = useState(perfumes);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-  useMemo(() => {
+  // Sync with perfumes data
+  useEffect(() => {
     setFilteredProducts(perfumes);
   }, [perfumes]);
 
@@ -27,7 +28,7 @@ export default function FeaturedProducts() {
   return (
     <section id="featured" className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header - Clean Sephora Style */}
+        {/* Section Header */}
         <div className="text-center mb-8">
           <h2 className="font-playfair text-xl sm:text-2xl md:text-3xl text-white">
             {t('heroTitle1', lang)} {t('heroTitle2', lang)}
@@ -39,7 +40,7 @@ export default function FeaturedProducts() {
           <SearchFilter products={perfumes} onFilter={handleFilter} />
         </div>
 
-        {/* Products Grid - Sephora Style: 2 cols mobile, 4 cols desktop */}
+        {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {filteredProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />

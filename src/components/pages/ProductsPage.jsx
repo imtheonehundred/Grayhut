@@ -1,6 +1,5 @@
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
@@ -9,17 +8,20 @@ import SearchFilter from '../ui/SearchFilter';
 
 export default function ProductsPage() {
   const { category } = useParams();
+  const navigate = useNavigate();
   const { perfumes } = useData();
   const { lang } = useLanguage();
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  useMemo(() => {
+  // Filter products based on category
+  useEffect(() => {
     if (category && category !== 'all') {
       setFilteredProducts(perfumes.filter(p => p.category === category));
     } else {
       setFilteredProducts(perfumes);
     }
-  }, [perfumes, category]);
+  }, [category, perfumes]);
 
   const handleFilter = (products) => {
     setFilteredProducts(products);
@@ -39,70 +41,46 @@ export default function ProductsPage() {
   return (
     <section className="pt-28 pb-20 px-4 sm:px-6 lg:px-12 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Header - Clean Sephora Style */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
-        >
-          <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl text-white mb-4">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl text-white mb-2">
             {getCategoryTitle()}
           </h1>
-        </motion.div>
+        </div>
 
         {/* Search & Filter */}
         <div className="mb-8">
-          <SearchFilter products={category && category !== 'all' ? perfumes.filter(p => p.category === category) : perfumes} onFilter={handleFilter} />
+          <SearchFilter
+            products={category && category !== 'all' ? perfumes.filter(p => p.category === category) : perfumes}
+            onFilter={handleFilter}
+          />
         </div>
 
-        {/* Products Grid - Sephora Style */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
-        >
+        {/* Products Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {filteredProducts.map((product, index) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
-            >
-              <ProductCard product={product} index={index} />
-            </motion.div>
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
-        </motion.div>
+        </div>
 
         {/* Empty State */}
         {filteredProducts.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <p className="text-gray-400 font-playfair text-xl">
+          <div className="text-center py-20">
+            <p className="text-gray-400 font-playfair text-lg">
               {t('noProducts', lang)}
             </p>
-          </motion.div>
+          </div>
         )}
 
         {/* Back Link */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center mt-16"
-        >
-          <Link
-            to="/"
-            className="btn-secondary inline-block"
+        <div className="text-center mt-12">
+          <button
+            onClick={() => navigate('/')}
+            className="px-8 py-3 border border-accent text-accent text-xs tracking-widest uppercase hover:bg-accent hover:text-primary transition-colors"
           >
             {lang === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}
-          </Link>
-        </motion.div>
+          </button>
+        </div>
       </div>
     </section>
   );
