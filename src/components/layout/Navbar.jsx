@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X, Search, Globe } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
@@ -12,7 +12,6 @@ export default function Navbar() {
   const { setIsCartOpen, cartCount } = useCart();
   const { lang, dir, toggleLanguage } = useLanguage();
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,47 +27,32 @@ export default function Navbar() {
   }, [location.pathname]);
 
   const navLinksAr = [
-    { name: 'الرئيسية', href: '/' },
-    { name: 'المكياج', href: '/makeup' },
-    { name: 'العناية بالبشرة', href: '/category/skincare' },
-    { name: 'الشعر', href: '/category/hair' },
-    { name: 'العطور', href: '/category/fragrance' },
-    { name: 'من نحن', href: '/#about' },
-    { name: 'اتصل بنا', href: '/#footer' },
+    { name: 'الرئيسية', to: '/' },
+    { name: 'المكياج', to: '/makeup' },
+    { name: 'العناية بالبشرة', to: '/category/skincare' },
+    { name: 'الشعر', to: '/category/hair' },
+    { name: 'العطور', to: '/category/fragrance' },
   ];
 
   const navLinksEn = [
-    { name: 'Home', href: '/' },
-    { name: 'Makeup', href: '/makeup' },
-    { name: 'Skincare', href: '/category/skincare' },
-    { name: 'Hair', href: '/category/hair' },
-    { name: 'Fragrance', href: '/category/fragrance' },
-    { name: 'About', href: '/#about' },
-    { name: 'Contact', href: '/#footer' },
+    { name: 'Home', to: '/' },
+    { name: 'Makeup', to: '/makeup' },
+    { name: 'Skincare', to: '/category/skincare' },
+    { name: 'Hair', to: '/category/hair' },
+    { name: 'Fragrance', to: '/category/fragrance' },
   ];
 
   const navLinks = lang === 'ar' ? navLinksAr : navLinksEn;
 
-  const isActive = (href) => {
-    if (href.startsWith('/#')) {
-      return false;
-    }
-    if (href === '/') {
+  const isActive = (to) => {
+    if (to === '/') {
       return location.pathname === '/';
     }
-    return location.pathname.startsWith(href);
+    return location.pathname.startsWith(to);
   };
 
-  const handleNavClick = (e, href) => {
-    if (href.startsWith('/#')) {
-      e.preventDefault();
-      const id = href.substring(2);
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-      setIsMobileMenuOpen(false);
-    }
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -90,10 +74,10 @@ export default function Navbar() {
               {navLinks.slice(0, 3).map((link) => (
                 <Link
                   key={link.name}
-                  to={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
+                  to={link.to}
+                  onClick={closeMobileMenu}
                   className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
-                    isActive(link.href) ? 'text-accent' : 'text-gray-300 hover:text-accent'
+                    isActive(link.to) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
                   {link.name}
@@ -117,10 +101,10 @@ export default function Navbar() {
               {navLinks.slice(3).map((link) => (
                 <Link
                   key={link.name}
-                  to={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
+                  to={link.to}
+                  onClick={closeMobileMenu}
                   className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
-                    isActive(link.href) ? 'text-accent' : 'text-gray-300 hover:text-accent'
+                    isActive(link.to) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
                   {link.name}
@@ -173,9 +157,9 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-40 lg:hidden bg-black/95 backdrop-blur-lg"
           >
-            {/* Close Button - Only One */}
+            {/* Close Button */}
             <button
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
               className={`absolute top-6 end-6 z-50 text-white p-2 hover:text-accent transition-colors ${dir === 'rtl' ? 'end-auto start-6' : ''}`}
             >
               <X size={28} />
@@ -193,8 +177,8 @@ export default function Navbar() {
                     transition={{ delay: i * 0.05 }}
                   >
                     <Link
-                      to={link.href}
-                      onClick={(e) => handleNavClick(e, link.href)}
+                      to={link.to}
+                      onClick={closeMobileMenu}
                       className="font-playfair text-xl sm:text-2xl md:text-3xl text-white hover:text-accent transition-colors"
                     >
                       {link.name}
