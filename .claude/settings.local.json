@@ -6,7 +6,10 @@
       "Bash(git push:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(pkill -f vite)",
+      "Bash(lsof -ti:5173)",
+      "Bash(xargs kill:*)"
     ]
   }
 }

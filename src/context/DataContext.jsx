@@ -344,14 +344,15 @@ export function DataProvider({ children }) {
 
   // WhatsApp Settings - save to API
   const updateWhatsappSettings = useCallback(async (updates) => {
-    const newSettings = { ...whatsappSettings, ...updates }
-    setWhatsappSettings(newSettings)
+    // Save to local state immediately
+    setWhatsappSettings(updates)
     try {
-      await api.updateWhatsAppSettings(newSettings)
+      // Sync to API
+      await api.updateWhatsAppSettings(updates)
     } catch (err) {
       console.error('Failed to save WhatsApp settings:', err)
     }
-  }, [whatsappSettings])
+  }, [])
 
   // Site Settings
   const updateSiteSettings = useCallback((updates) => {
