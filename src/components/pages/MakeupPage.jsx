@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -10,14 +10,15 @@ export default function MakeupPage() {
   const navigate = useNavigate();
   const { makeup } = useData();
   const { lang } = useLanguage();
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchFiltered, setSearchFiltered] = useState(null);
 
-  useEffect(() => {
-    setFilteredProducts(makeup);
-  }, [makeup]);
+  // Compute displayed products directly - NO stale state
+  const displayedProducts = useMemo(() => {
+    return searchFiltered !== null ? searchFiltered : makeup;
+  }, [makeup, searchFiltered]);
 
   const handleFilter = (products) => {
-    setFilteredProducts(products);
+    setSearchFiltered(products);
   };
 
   return (
@@ -37,13 +38,13 @@ export default function MakeupPage() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {filteredProducts.map((product, index) => (
+          {displayedProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
 
         {/* Empty State */}
-        {filteredProducts.length === 0 && (
+        {displayedProducts.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-400 font-playfair text-lg">
               {t('noProducts', lang)}

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
@@ -11,20 +11,25 @@ export default function ProductsPage() {
   const navigate = useNavigate();
   const { perfumes } = useData();
   const { lang } = useLanguage();
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchFiltered, setSearchFiltered] = useState(null);
 
-  // Filter products based on category
-  useEffect(() => {
-    if (category && category !== 'all') {
-      setFilteredProducts(perfumes.filter(p => p.category === category));
-    } else {
-      setFilteredProducts(perfumes);
+  // Compute filtered products directly from perfumes and category - NO stale state
+  const displayedProducts = useMemo(() => {
+    // Start with all perfumes (or filtered by category)
+    let products = category && category !== 'all'
+      ? perfumes.filter(p => p.category === category)
+      : perfumes;
+
+    // Apply search filter if it exists
+    if (searchFiltered !== null) {
+      products = searchFiltered;
     }
-  }, [category, perfumes]);
+
+    return products;
+  }, [category, perfumes, searchFiltered]);
 
   const handleFilter = (products) => {
-    setFilteredProducts(products);
+    setSearchFiltered(products);
   };
 
   const getCategoryTitle = () => {
@@ -51,20 +56,22 @@ export default function ProductsPage() {
         {/* Search & Filter */}
         <div className="mb-8">
           <SearchFilter
-            products={category && category !== 'all' ? perfumes.filter(p => p.category === category) : perfumes}
+            products={category && category !== 'all'
+              ? perfumes.filter(p => p.category === category)
+              : perfumes}
             onFilter={handleFilter}
           />
         </div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {filteredProducts.map((product, index) => (
+          {displayedProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
 
         {/* Empty State */}
-        {filteredProducts.length === 0 && (
+        {displayedProducts.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-400 font-playfair text-lg">
               {t('noProducts', lang)}
