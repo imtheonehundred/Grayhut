@@ -58,6 +58,27 @@ export function DataProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // WhatsApp Settings (fetched from API)
+  const [whatsappSettings, setWhatsappSettings] = useState({
+    enabled: false,
+    accessToken: '',
+    phoneNumberId: '',
+    businessPhone: '',
+    orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+    orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
+    orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
+  })
+
+  // Fetch WhatsApp settings from API - MUST be defined before useEffect
+  const fetchWhatsAppSettings = useCallback(async () => {
+    try {
+      const settings = await api.getWhatsAppSettings()
+      setWhatsappSettings(settings)
+    } catch (err) {
+      console.error('Failed to fetch WhatsApp settings:', err)
+    }
+  }, [])
+
   // Fetch products from API
   const fetchProducts = useCallback(async () => {
     try {
@@ -120,37 +141,6 @@ export function DataProvider({ children }) {
     const saved = localStorage.getItem('grayhut-orders')
     return saved ? JSON.parse(saved) : []
   })
-
-  // WhatsApp Settings (fetched from API)
-  const [whatsappSettings, setWhatsappSettings] = useState({
-    enabled: false,
-    accessToken: '',
-    phoneNumberId: '',
-    businessPhone: '',
-    orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
-    orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
-    orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
-  })
-
-  // Fetch WhatsApp settings from API
-  const fetchWhatsAppSettings = useCallback(async () => {
-    try {
-      const settings = await api.getWhatsAppSettings()
-      setWhatsappSettings(settings)
-    } catch (err) {
-      console.error('Failed to fetch WhatsApp settings:', err)
-      // Fallback to defaults
-      setWhatsappSettings({
-        enabled: false,
-        accessToken: '',
-        phoneNumberId: '',
-        businessPhone: '',
-        orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
-        orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
-        orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
-      })
-    }
-  }, [])
 
   // Site Settings (localStorage for now)
   const [siteSettings, setSiteSettings] = useState(() => {
