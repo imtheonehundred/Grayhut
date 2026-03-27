@@ -4,10 +4,7 @@ import { Check, Image as ImageIcon, MessageCircle, AlertCircle } from 'lucide-re
 import { useData } from '../../../context/DataContext'
 
 export default function SiteSettings() {
-  const { siteSettings, updateSiteSettings, updateWhatsappSettings } = useData()
-
-  // WhatsApp settings from siteSettings (stored there for simplicity)
-  const existingWhatsapp = siteSettings.whatsapp || {}
+  const { siteSettings, updateSiteSettings, updateWhatsappSettings, whatsappSettings } = useData()
 
   const [formData, setFormData] = useState({
     hero: {
@@ -45,13 +42,13 @@ export default function SiteSettings() {
   })
 
   const [whatsappData, setWhatsappData] = useState({
-    enabled: existingWhatsapp.enabled || false,
-    accessToken: existingWhatsapp.accessToken || '',
-    phoneNumberId: existingWhatsapp.phoneNumberId || '',
-    businessPhone: existingWhatsapp.businessPhone || '',
-    orderReceivedTemplate: existingWhatsapp.orderReceivedTemplate || 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
-    orderPreparingTemplate: existingWhatsapp.orderPreparingTemplate || 'Your order #{order_id} is now being prepared.',
-    orderDeliveredTemplate: existingWhatsapp.orderDeliveredTemplate || 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
+    enabled: whatsappSettings?.enabled || false,
+    accessToken: whatsappSettings?.accessToken || '',
+    phoneNumberId: whatsappSettings?.phoneNumberId || '',
+    businessPhone: whatsappSettings?.businessPhone || '',
+    orderReceivedTemplate: whatsappSettings?.orderReceivedTemplate || 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+    orderPreparingTemplate: whatsappSettings?.orderPreparingTemplate || 'Your order #{order_id} is now being prepared.',
+    orderDeliveredTemplate: whatsappSettings?.orderDeliveredTemplate || 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
   })
 
   const handleSubmit = (e) => {

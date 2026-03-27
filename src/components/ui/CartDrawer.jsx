@@ -11,7 +11,7 @@ import { sendOrderWhatsApp } from '../../lib/whatsapp';
 
 export default function CartDrawer() {
   const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
-  const { addOrder, siteSettings } = useData();
+  const { addOrder, whatsappSettings } = useData();
   const { lang, dir } = useLanguage();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
@@ -45,7 +45,6 @@ export default function CartDrawer() {
     setOrderPlaced(true);
 
     // Send WhatsApp notification
-    const whatsappSettings = siteSettings?.whatsapp;
     if (whatsappSettings?.enabled) {
       setIsSendingWhatsApp(true);
       try {

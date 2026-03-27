@@ -5,7 +5,7 @@ import { useData } from '../../../context/DataContext'
 import { sendOrderWhatsApp } from '../../../lib/whatsapp'
 
 export default function OrdersManagement() {
-  const { orders, updateOrderStatus, siteSettings } = useData()
+  const { orders, updateOrderStatus, whatsappSettings } = useData()
   const [sendingWhatsApp, setSendingWhatsApp] = useState(null) // orderId being sent
 
   const statusOptions = [
@@ -30,7 +30,6 @@ export default function OrdersManagement() {
     if (!order) return
 
     // Send WhatsApp notification for certain statuses
-    const whatsappSettings = siteSettings?.whatsapp
     if (whatsappSettings?.enabled) {
       // Map our status to WhatsApp template status
       const whatsappStatusMap = {
