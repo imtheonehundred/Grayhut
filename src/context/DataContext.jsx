@@ -63,6 +63,10 @@ export function DataProvider({ children }) {
     try {
       setLoading(true)
       const products = await api.getProducts()
+      // If API returns empty or invalid data, use fallback
+      if (!products || !Array.isArray(products) || products.length === 0) {
+        throw new Error('API returned empty products')
+      }
       // Normalize all products
       const normalized = products.map(normalizeProduct)
       const perfumesData = normalized.filter(p => p.productType === 'perfume' || !p.productType)
@@ -76,12 +80,12 @@ export function DataProvider({ children }) {
       // Fallback to localStorage first, then default products
       const savedPerfumes = localStorage.getItem('grayhut-perfumes')
       const savedMakeup = localStorage.getItem('grayhut-makeup')
-      if (savedPerfumes) {
+      if (savedPerfumes && JSON.parse(savedPerfumes).length > 0) {
         setPerfumes(JSON.parse(savedPerfumes))
       } else {
         setPerfumes(defaultProducts.filter(p => !p.category || p.category !== 'makeup'))
       }
-      if (savedMakeup) {
+      if (savedMakeup && JSON.parse(savedMakeup).length > 0) {
         setMakeup(JSON.parse(savedMakeup))
       } else {
         setMakeup(defaultProducts.filter(p => p.category === 'makeup'))
