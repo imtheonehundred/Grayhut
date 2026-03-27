@@ -100,7 +100,8 @@ export function DataProvider({ children }) {
 
   useEffect(() => {
     fetchProducts()
-  }, [fetchProducts])
+    fetchWhatsAppSettings()
+  }, [fetchProducts, fetchWhatsAppSettings])
 
   // Categories (localStorage for now)
   const [categories, setCategories] = useState(() => {
@@ -120,20 +121,36 @@ export function DataProvider({ children }) {
     return saved ? JSON.parse(saved) : []
   })
 
-  // WhatsApp Settings (localStorage for now)
-  const [whatsappSettings, setWhatsappSettings] = useState(() => {
-    const saved = localStorage.getItem('grayhut-whatsapp-settings')
-    return saved ? JSON.parse(saved) : {
-      enabled: false,
-      accessToken: '',
-      phoneNumberId: '',
-      businessPhone: '',
-      orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
-      orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
-      orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.',
-      updatedAt: new Date().toISOString()
-    }
+  // WhatsApp Settings (fetched from API)
+  const [whatsappSettings, setWhatsappSettings] = useState({
+    enabled: false,
+    accessToken: '',
+    phoneNumberId: '',
+    businessPhone: '',
+    orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+    orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
+    orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
   })
+
+  // Fetch WhatsApp settings from API
+  const fetchWhatsAppSettings = useCallback(async () => {
+    try {
+      const settings = await api.getWhatsAppSettings()
+      setWhatsappSettings(settings)
+    } catch (err) {
+      console.error('Failed to fetch WhatsApp settings:', err)
+      // Fallback to defaults
+      setWhatsappSettings({
+        enabled: false,
+        accessToken: '',
+        phoneNumberId: '',
+        businessPhone: '',
+        orderReceivedTemplate: 'Order #{order_id} received! Thank you {customer_name}. We will contact you soon.',
+        orderPreparingTemplate: 'Your order #{order_id} is now being prepared.',
+        orderDeliveredTemplate: 'Your order #{order_id} has been delivered! Thank you for shopping with us.'
+      })
+    }
+  }, [])
 
   // Site Settings (localStorage for now)
   const [siteSettings, setSiteSettings] = useState(() => {
@@ -293,29 +310,48 @@ export function DataProvider({ children }) {
     setTestimonials(prev => prev.filter(t => t.id !== id))
   }, [])
 
-  // Orders - Local
-  const addOrder = useCallback((order) => {
+  // Orders - API synced
+  const addOrder = useCallback(async (order) => {
     const newOrder = {
       ...order,
-      id: uuidv4(),
       status: 'pending',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
-    setOrders(prev => [...prev, newOrder])
-    return newOrder
+    try {
+      const savedOrder = await api.createOrder(newOrder)
+      setOrders(prev => [...prev, savedOrder])
+      return savedOrder
+    } catch (err) {
+      console.error('Failed to create order:', err)
+      // Fallback to local storage
+      const localOrder = { ...newOrder, id: uuidv4() }
+      setOrders(prev => [...prev, localOrder])
+      return localOrder
+    }
   }, [])
 
-  const updateOrderStatus = useCallback((id, status) => {
+  const updateOrderStatus = useCallback(async (id, status) => {
     setOrders(prev => prev.map(o =>
       o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o
     ))
+    try {
+      await api.updateOrderStatus(id, status)
+    } catch (err) {
+      console.error('Failed to update order status:', err)
+    }
   }, [])
 
-  // WhatsApp Settings
-  const updateWhatsappSettings = useCallback((updates) => {
-    setWhatsappSettings(prev => ({ ...prev, ...updates, updatedAt: new Date().toISOString() }))
-  }, [])
+  // WhatsApp Settings - save to API
+  const updateWhatsappSettings = useCallback(async (updates) => {
+    const newSettings = { ...whatsappSettings, ...updates }
+    setWhatsappSettings(newSettings)
+    try {
+      await api.updateWhatsAppSettings(newSettings)
+    } catch (err) {
+      console.error('Failed to save WhatsApp settings:', err)
+    }
+  }, [whatsappSettings])
 
   // Site Settings
   const updateSiteSettings = useCallback((updates) => {

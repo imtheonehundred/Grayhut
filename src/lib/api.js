@@ -68,6 +68,41 @@ export const api = {
     return fetchAPI(`/products/${id}`, {
       method: 'DELETE'
     })
+  },
+
+  // Settings
+  getSettings: async () => {
+    return fetchAPI('/settings')
+  },
+
+  getWhatsAppSettings: async () => {
+    return fetchAPI('/settings/whatsapp')
+  },
+
+  updateWhatsAppSettings: async (data) => {
+    return fetchAPI('/settings/whatsapp', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    })
+  },
+
+  // Orders
+  getOrders: async () => {
+    return fetchAPI('/orders')
+  },
+
+  createOrder: async (orderData) => {
+    return fetchAPI('/orders', {
+      method: 'POST',
+      body: JSON.stringify(orderData)
+    })
+  },
+
+  updateOrderStatus: async (id, status) => {
+    return fetchAPI(`/orders/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    })
   }
 }
 
