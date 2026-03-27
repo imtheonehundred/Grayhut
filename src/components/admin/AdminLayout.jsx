@@ -53,7 +53,7 @@ export default function AdminLayout() {
   const currentTitle = pageTitles[location.pathname] || 'Admin'
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex" dir="ltr">
       {/* Mobile Overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
