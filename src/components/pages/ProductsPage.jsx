@@ -1,17 +1,28 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
 import ProductCard from '../ui/ProductCard';
 import SearchFilter from '../ui/SearchFilter';
+import { Loader2 } from 'lucide-react';
 
 export default function ProductsPage() {
   const { category } = useParams();
   const navigate = useNavigate();
-  const { perfumes } = useData();
+  const { perfumes, loading } = useData();
   const { lang } = useLanguage();
   const [searchFiltered, setSearchFiltered] = useState(null);
+
+  // Reset search when category changes
+  useEffect(() => {
+    setSearchFiltered(null);
+  }, [category]);
+
+  // Scroll to top on category change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
 
   // Compute filtered products directly from perfumes and category - NO stale state
   const displayedProducts = useMemo(() => {
@@ -63,15 +74,24 @@ export default function ProductsPage() {
           />
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 text-accent animate-spin" />
+          </div>
+        )}
+
         {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {displayedProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
-        </div>
+        {!loading && displayedProducts.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            {displayedProducts.map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
+          </div>
+        )}
 
         {/* Empty State */}
-        {displayedProducts.length === 0 && (
+        {!loading && displayedProducts.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-400 font-playfair text-lg">
               {t('noProducts', lang)}

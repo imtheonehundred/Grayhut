@@ -18,8 +18,8 @@ export default function Categories() {
 
         {/* Categories Grid - 3 cols on desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-          {categories.map((category, index) => (
-            <CategoryCard key={category.id} category={category} index={index} />
+          {categories.map((category) => (
+            <CategoryCard key={category.id} category={category} />
           ))}
         </div>
       </div>

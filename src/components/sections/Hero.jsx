@@ -1,11 +1,12 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../../context/LanguageContext'
 import { t } from '../../data/translations'
 
 export default function Hero() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { lang } = useLanguage()
   const ref = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -29,7 +30,11 @@ export default function Hero() {
   }, [])
 
   const handleShopNow = () => {
-    navigate('/category/all')
+    if (location.pathname === '/') {
+      document.getElementById('featured')?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      navigate('/#featured')
+    }
   }
 
   return (

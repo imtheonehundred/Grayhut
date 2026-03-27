@@ -61,7 +61,7 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 start-0 end-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 start-0 end-0 z-[100] transition-all duration-300 ${
           isScrolled
             ? 'glass shadow-[0_4px_30px_rgba(0,0,0,0.5)] bg-background/90 backdrop-blur-lg'
             : 'bg-transparent'
@@ -75,8 +75,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.to}
-                  onClick={closeMobileMenu}
-                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
+                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap cursor-pointer ${
                     isActive(link.to) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
@@ -102,8 +101,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.to}
-                  onClick={closeMobileMenu}
-                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap ${
+                  className={`text-xs xl:text-sm tracking-widest uppercase transition-colors duration-300 relative group whitespace-nowrap cursor-pointer ${
                     isActive(link.to) ? 'text-accent' : 'text-gray-300 hover:text-accent'
                   }`}
                 >
@@ -155,7 +153,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 lg:hidden bg-black/95 backdrop-blur-lg"
+            className="fixed inset-0 z-[90] lg:hidden bg-black/95 backdrop-blur-lg"
           >
             {/* Close Button */}
             <button

@@ -59,7 +59,7 @@ export default function CartDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => !isCheckoutOpen && setIsCartOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110]"
           />
 
           {/* Drawer */}
@@ -68,7 +68,7 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: dir === 'rtl' ? '-100%' : '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className={`fixed top-0 ${dir === 'rtl' ? 'left-0' : 'right-0'} bottom-0 w-full max-w-md bg-primary border-${dir === 'rtl' ? 'r' : 'l'} border-white/10 z-50 flex flex-col`}
+            className={`fixed top-0 ${dir === 'rtl' ? 'left-0' : 'right-0'} bottom-0 w-full max-w-md bg-primary border-${dir === 'rtl' ? 'r' : 'l'} border-white/10 z-[110] flex flex-col`}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10">

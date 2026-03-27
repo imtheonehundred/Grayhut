@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 
-export default function CategoryCard({ category, index = 0 }) {
-  const navigate = useNavigate();
+export default function CategoryCard({ category }) {
   const { lang } = useLanguage();
   const name = lang === 'ar' ? category.name : (category.nameEn || category.name);
 
   const getCategoryPath = (slug) => {
-    switch(slug) {
+    switch (slug) {
       case 'makeup': return '/makeup';
       case 'skincare': return '/category/skincare';
       case 'hair': return '/category/hair';
@@ -17,17 +16,10 @@ export default function CategoryCard({ category, index = 0 }) {
     }
   };
 
-  const handleClick = () => {
-    navigate(getCategoryPath(category.slug));
-  };
-
   return (
-    <div
-      onClick={handleClick}
-      className="group relative h-48 sm:h-56 md:h-64 overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-300"
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+    <Link
+      to={getCategoryPath(category.slug)}
+      className="group relative block h-48 sm:h-56 md:h-64 overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-300"
     >
       {/* Background Image */}
       <img
@@ -45,6 +37,6 @@ export default function CategoryCard({ category, index = 0 }) {
           {name}
         </h3>
       </div>
-    </div>
+    </Link>
   );
 }

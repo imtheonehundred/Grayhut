@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import { countdownDate, products } from '../../data/products';
 import CountdownTimer from '../ui/CountdownTimer';
 import ProductCard from '../ui/ProductCard';
@@ -6,6 +7,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
 
 export default function SpecialOffer() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { lang } = useLanguage();
   const offerProducts = products.filter((p) => p.originalPrice);
 
@@ -39,7 +42,17 @@ export default function SpecialOffer() {
 
         {/* CTA */}
         <div className="text-center mt-10">
-          <button className="px-8 py-3 bg-accent text-primary text-xs tracking-widest uppercase hover:bg-yellow-400 transition-colors font-semibold">
+          <button
+            type="button"
+            onClick={() => {
+              if (location.pathname === '/') {
+                document.getElementById('featured')?.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                navigate('/#offer');
+              }
+            }}
+            className="px-8 py-3 bg-accent text-primary text-xs tracking-widest uppercase hover:bg-yellow-400 transition-colors font-semibold"
+          >
             {t('shopAllOffers', lang)}
           </button>
         </div>

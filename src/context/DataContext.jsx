@@ -73,6 +73,9 @@ export function DataProvider({ children }) {
       const makeupData = normalized.filter(p => p.productType === 'makeup')
       setPerfumes(perfumesData)
       setMakeup(makeupData)
+      // Cache to localStorage on successful fetch
+      localStorage.setItem('grayhut-perfumes', JSON.stringify(perfumesData))
+      localStorage.setItem('grayhut-makeup', JSON.stringify(makeupData))
       setError(null)
     } catch (err) {
       console.error('Failed to load products from API:', err)
