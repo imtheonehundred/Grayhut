@@ -1,17 +1,15 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../data/translations';
 import ProductCard from '../ui/ProductCard';
 import SearchFilter from '../ui/SearchFilter';
-import { ScrollReveal, StaggerReveal, FadeUp } from '../ui/animations';
 
 export default function FeaturedProducts() {
   const navigate = useNavigate();
   const { perfumes } = useData();
-  const { lang, dir } = useLanguage();
+  const { lang } = useLanguage();
   const [filteredProducts, setFilteredProducts] = useState(perfumes);
 
   useMemo(() => {
@@ -22,111 +20,50 @@ export default function FeaturedProducts() {
     setFilteredProducts(products);
   };
 
-  const scrollToCategories = () => {
-    document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const viewAllProducts = () => {
     navigate('/category/all');
   };
 
   return (
-    <section id="featured" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-12 bg-background">
+    <section id="featured" className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header - Cinematic Reveal */}
-        <ScrollReveal type="blur" className="text-center mb-10 sm:mb-16">
-          <FadeUp blur delay={0}>
-            <p className="text-accent tracking-[0.3em] uppercase text-xs sm:text-sm mb-4">
-              {t('heroPreTitle', lang)}
-            </p>
-          </FadeUp>
-
-          <FadeUp blur delay={0.15}>
-            <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-4 sm:mb-6">
-              <span className="gold-text">{t('heroTitle1', lang)}</span>{' '}
-              <span className="text-white">{t('heroTitle2', lang)}</span>
-            </h2>
-          </FadeUp>
-
-          <FadeUp blur delay={0.3}>
-            <div className="flex items-center justify-center gap-4">
-              <motion.div
-                className="w-8 sm:w-12 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-accent"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              />
-              <motion.div
-                className="w-3 h-3 border border-accent rotate-45"
-                initial={{ scale: 0, rotate: 0 }}
-                whileInView={{ scale: 1, rotate: 45 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              />
-              <motion.div
-                className="w-8 sm:w-12 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-accent"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              />
-            </div>
-          </FadeUp>
-        </ScrollReveal>
+        {/* Section Header - Clean Sephora Style */}
+        <div className="text-center mb-8">
+          <h2 className="font-playfair text-xl sm:text-2xl md:text-3xl text-white">
+            {t('heroTitle1', lang)} {t('heroTitle2', lang)}
+          </h2>
+        </div>
 
         {/* Search & Filter */}
-        <ScrollReveal type="fade" delay={0.2}>
-          <div className="mb-8 sm:mb-12">
-            <SearchFilter products={perfumes} onFilter={handleFilter} />
-          </div>
-        </ScrollReveal>
+        <div className="mb-8">
+          <SearchFilter products={perfumes} onFilter={handleFilter} />
+        </div>
 
-        {/* Products Grid - Mobile 1 column, proper spacing */}
-        <StaggerReveal direction="up" stagger={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Products Grid - Sephora Style: 2 cols mobile, 4 cols desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {filteredProducts.map((product, index) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
-            >
-              <ProductCard product={product} index={index} />
-            </motion.div>
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
-        </StaggerReveal>
+        </div>
 
         {/* Empty State */}
         {filteredProducts.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16 sm:py-20"
-          >
-            <p className="text-gray-400 font-playfair text-lg sm:text-xl">
+          <div className="text-center py-16">
+            <p className="text-gray-400 font-playfair text-lg">
               {t('noProducts', lang)}
             </p>
-          </motion.div>
+          </div>
         )}
 
         {/* View All Button */}
-        <ScrollReveal type="fade" delay={0.3}>
-          <div className="text-center mt-10 sm:mt-16">
-            <motion.button
-              onClick={viewAllProducts}
-              className="btn-secondary"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {t('viewAll', lang)}
-            </motion.button>
-          </div>
-        </ScrollReveal>
+        <div className="text-center mt-10">
+          <button
+            onClick={viewAllProducts}
+            className="px-8 py-3 border border-accent text-accent text-xs tracking-widest uppercase hover:bg-accent hover:text-primary transition-colors"
+          >
+            {t('viewAll', lang)}
+          </button>
+        </div>
       </div>
     </section>
   );

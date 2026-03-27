@@ -24,63 +24,29 @@ export default function CategoryCard({ category, index = 0 }) {
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        whileHover={{ y: -8 }}
-        className="group relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden cursor-pointer"
+        transition={{ duration: 0.5, delay: index * 0.08 }}
+        whileHover={{ scale: 1.02 }}
+        className="group relative h-48 sm:h-56 md:h-64 overflow-hidden cursor-pointer"
       >
         {/* Background Image */}
         <motion.img
           src={category.image}
           alt={name}
           className="absolute inset-0 w-full h-full object-cover"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 group-hover:from-black/95 group-hover:via-black/60 group-hover:to-black/40 transition-all duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
         {/* Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center">
-          {/* Gold Line Above */}
-          <motion.div
-            className="w-8 sm:w-10 md:w-12 h-[2px] bg-accent mb-4 sm:mb-6"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
-          />
-
+        <div className="absolute inset-0 flex flex-col items-center justify-end p-4 text-center">
           {/* Category Name */}
-          <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-2 sm:mb-3 group-hover:text-accent transition-colors duration-300">
+          <h3 className="font-playfair text-lg sm:text-xl font-semibold text-white group-hover:text-accent transition-colors duration-300">
             {name}
           </h3>
-
-          {/* Description */}
-          <p className="text-gray-300 text-xs sm:text-sm tracking-wide mb-4 sm:mb-6 max-w-xs">
-            {category.description}
-          </p>
-
-          {/* Gold Line Below */}
-          <motion.div
-            className="w-8 sm:w-10 md:w-12 h-[2px] bg-accent"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 + 0.4 }}
-          />
         </div>
-
-        {/* Gold Border */}
-        <div
-          className={`absolute inset-0 border-2 border-accent/0 group-hover:border-accent/40 transition-all duration-500 pointer-events-none`}
-        />
-
-        {/* Corner Accents */}
-        <div className="absolute top-3 sm:top-4 start-3 sm:start-4 w-6 sm:w-8 h-6 sm:h-8 border-t-2 border-s-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-        <div className="absolute top-3 sm:top-4 end-3 sm:end-4 w-6 sm:w-8 h-6 sm:h-8 border-t-2 border-e-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-        <div className="absolute bottom-3 sm:bottom-4 start-3 sm:start-4 w-6 sm:w-8 h-6 sm:h-8 border-b-2 border-s-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
-        <div className="absolute bottom-3 sm:bottom-4 end-3 sm:end-4 w-6 sm:w-8 h-6 sm:h-8 border-b-2 border-e-2 border-accent/0 group-hover:border-accent/60 transition-all duration-500" />
       </motion.div>
     </Link>
   );

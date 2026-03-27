@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { countdownDate, products } from '../../data/products';
 import CountdownTimer from '../ui/CountdownTimer';
 import ProductCard from '../ui/ProductCard';
@@ -11,73 +10,39 @@ export default function SpecialOffer() {
   const offerProducts = products.filter((p) => p.originalPrice);
 
   return (
-    <section id="offer" className="py-24 lg:py-32 px-6 lg:px-12 bg-gradient-to-b from-transparent via-secondary/20 to-transparent">
+    <section id="offer" className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          {/* Label */}
-          <p className="text-accent tracking-[0.3em] uppercase text-sm mb-4">
-            {t('limitedTime', lang)}
-          </p>
-
-          {/* Title */}
-          <h2 className="section-title text-white mb-6">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="font-playfair text-xl sm:text-2xl md:text-3xl text-white">
             {t('specialOffers', lang)}
           </h2>
-
-          {/* Gold Lines */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-accent" />
-            <div className="w-3 h-3 border border-accent rotate-45" />
-            <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-accent" />
-          </div>
-        </motion.div>
+        </div>
 
         {/* Countdown Timer */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-col items-center justify-center mb-16"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Gift size={24} className="text-accent" />
-            <span className="text-gray-400 tracking-widest uppercase text-sm">
+        <div className="flex flex-col items-center justify-center mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <Gift size={18} className="text-accent" />
+            <span className="text-gray-400 text-xs tracking-wider uppercase">
               {lang === 'ar' ? 'ينتهي العرض خلال' : 'Offer Ends In'}
             </span>
           </div>
           <CountdownTimer targetDate={countdownDate} />
-        </motion.div>
+        </div>
 
         {/* Offer Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {offerProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-16"
-        >
-          <button
-            onClick={() => document.getElementById('offer')?.scrollIntoView({ behavior: 'smooth' })}
-            className="btn-primary"
-          >
+        <div className="text-center mt-10">
+          <button className="px-8 py-3 bg-accent text-primary text-xs tracking-widest uppercase hover:bg-yellow-400 transition-colors font-semibold">
             {t('shopAllOffers', lang)}
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

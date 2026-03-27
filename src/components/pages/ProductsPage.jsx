@@ -37,37 +37,29 @@ export default function ProductsPage() {
   };
 
   return (
-    <section className="pt-32 pb-24 px-4 md:px-6 lg:px-12 bg-background min-h-screen">
+    <section className="pt-28 pb-20 px-4 sm:px-6 lg:px-12 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header - Clean Sephora Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <p className="text-accent tracking-[0.3em] uppercase text-xs md:text-sm mb-4">
-            GrayHut
-          </p>
-          <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+          <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl text-white mb-4">
             {getCategoryTitle()}
           </h1>
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-12 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-accent" />
-            <div className="w-3 h-3 border border-accent rotate-45" />
-            <div className="w-12 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-accent" />
-          </div>
         </motion.div>
 
         {/* Search & Filter */}
-        <div className="mb-12">
+        <div className="mb-8">
           <SearchFilter products={category && category !== 'all' ? perfumes.filter(p => p.category === category) : perfumes} onFilter={handleFilter} />
         </div>
 
-        {/* Products Grid */}
+        {/* Products Grid - Sephora Style */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
         >
           {filteredProducts.map((product, index) => (
             <motion.div

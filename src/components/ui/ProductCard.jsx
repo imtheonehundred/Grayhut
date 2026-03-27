@@ -38,7 +38,7 @@ export default function ProductCard({ product, index = 0 }) {
         }`}
       >
         {/* Image Container - Mobile Responsive */}
-        <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+        <div className="relative h-40 sm:h-56 md:h-72 overflow-hidden">
           <motion.img
             src={product.image}
             alt={product.name}
@@ -95,7 +95,7 @@ export default function ProductCard({ product, index = 0 }) {
           >
             <button
               onClick={handleAddToCart}
-              className={`w-full py-3 flex items-center justify-center gap-2 font-semibold text-sm tracking-wider transition-all duration-300 ${
+              className={`w-full py-2 text-xs sm:text-sm flex items-center justify-center gap-2 font-semibold tracking-wider transition-all duration-300 ${
                 isAdded
                   ? 'bg-green-500 text-white'
                   : 'bg-accent text-primary hover:bg-yellow-400'
@@ -114,14 +114,14 @@ export default function ProductCard({ product, index = 0 }) {
         </div>
 
         {/* Product Info - Mobile Responsive */}
-        <div className="p-4 sm:p-6">
+        <div className="p-3 sm:p-4">
           {/* Brand */}
           <p className="text-[10px] sm:text-xs text-gray-500 tracking-widest uppercase mb-1">
             {product.brand}
           </p>
 
           {/* Name */}
-          <h3 className="font-playfair text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2 group-hover:text-accent transition-colors truncate">
+          <h3 className="font-playfair text-sm sm:text-base md:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-accent transition-colors truncate">
             {product.name}
           </h3>
 
@@ -132,7 +132,7 @@ export default function ProductCard({ product, index = 0 }) {
 
           {/* Price */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="gold-text font-semibold text-base sm:text-lg">
+            <span className="gold-text font-semibold text-sm sm:text-base">
               {formatPriceIQD(product.price)}
             </span>
             {product.originalPrice && (

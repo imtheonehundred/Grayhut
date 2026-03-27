@@ -73,24 +73,13 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Language Toggle Bar */}
-      <div className="h-8 bg-primary/50 flex items-center justify-center gap-4 text-xs border-b border-white/5">
-        <button
-          onClick={toggleLanguage}
-          className="flex items-center gap-1 text-gray-400 hover:text-accent transition-colors"
-        >
-          <Globe size={14} />
-          <span>{lang === 'ar' ? 'EN' : 'عربي'}</span>
-        </button>
-      </div>
-
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-8 start-0 end-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 start-0 end-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'glass shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+            ? 'glass shadow-[0_4px_30px_rgba(0,0,0,0.5)] bg-background/90 backdrop-blur-lg'
             : 'bg-transparent'
         }`}
       >
@@ -165,9 +154,9 @@ export default function Navbar() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 text-gray-300"
+                className={`lg:hidden p-2 text-gray-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : ''}`}
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                <Menu size={24} />
               </button>
             </div>
           </div>

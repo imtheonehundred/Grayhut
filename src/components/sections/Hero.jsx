@@ -1,12 +1,10 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { AnimatedChars, AnimatedWords } from '../ui/animations'
 import { useLanguage } from '../../context/LanguageContext'
 import { t } from '../../data/translations'
 
 export default function Hero() {
-  const { lang } = useLanguage()
+  const { lang, dir } = useLanguage()
   const ref = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -21,16 +19,6 @@ export default function Hero() {
   // Parallax for background image
   const backgroundY = useSpring(
     useTransform(scrollYProgress, [0, 1], ['0%', '40%']),
-    springConfig
-  )
-
-  // Parallax for smoke effects
-  const smoke1Y = useSpring(
-    useTransform(scrollYProgress, [0, 1], ['0%', '20%']),
-    springConfig
-  )
-  const smoke2Y = useSpring(
-    useTransform(scrollYProgress, [0, 1], ['0%', '30%']),
     springConfig
   )
 
@@ -78,175 +66,55 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-l from-background/60 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Parallax Smoke Effects */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: smoke1Y }}
-      >
-        <div className="absolute top-1/4 start-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] animate-float" />
-      </motion.div>
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: smoke2Y }}
-      >
-        <div
-          className="absolute bottom-1/3 end-1/4 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-[100px] animate-float"
-          style={{ animationDelay: '2s' }}
-        />
-      </motion.div>
-
-      {/* Additional floating particles */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']) }}
-      >
-        <div
-          className="absolute top-1/3 end-1/3 w-[200px] h-[200px] bg-accent/5 rounded-full blur-[60px] animate-float"
-          style={{ animationDelay: '1s' }}
-        />
-      </motion.div>
-
       {/* Content with fade on scroll */}
       <motion.div
-        className="relative h-full flex flex-col items-center justify-center text-center px-4 sm:px-6"
+        className="relative h-full flex flex-col items-center justify-center text-center px-6 sm:px-12"
         style={{
           opacity: contentOpacity,
           y: contentY
         }}
       >
-        {/* Content Wrapper with max-width */}
-        <div className="w-full max-w-4xl mx-auto">
+        {/* Content Wrapper */}
+        <div className="w-full max-w-3xl mx-auto">
           {/* Pre Title */}
           <motion.p
-            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-            animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-            transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-accent tracking-[0.3em] sm:tracking-[0.4em] uppercase text-xs sm:text-sm mb-6 sm:mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-accent tracking-[0.3em] uppercase text-xs mb-6"
           >
             {t('heroPreTitle', lang)}
           </motion.p>
 
-          {/* Main Title with character animation */}
-          <div className="mb-4 sm:mb-6 overflow-hidden">
-            <AnimatedChars
-              text={t('heroTitle1', lang)}
-              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white block leading-tight"
-              stagger={0.03}
-            />
-          </div>
-
-          <div className="mb-6 sm:mb-8 overflow-hidden">
-            <AnimatedWords
-              text={t('heroTitle2', lang)}
-              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight"
-              stagger={0.05}
-            />
-          </div>
-
-          <div className="mb-8 sm:mb-12 overflow-hidden">
-            <AnimatedWords
-              text={t('heroTitle3', lang)}
-              className="font-playfair text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold gold-text leading-tight"
-              stagger={0.05}
-            />
-          </div>
-
-          {/* Subtitle with fade up */}
-          <motion.p
-            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-            animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-            transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="font-cormorant text-base sm:text-lg md:text-2xl text-gray-300 max-w-2xl mx-auto mb-10 sm:mb-16 italic leading-relaxed"
+          {/* Main Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight"
           >
-            {t('heroSubtitle', lang)}
-          </motion.p>
+            <span className="gold-text">{t('heroTitle1', lang)}</span>{' '}
+            <span className="text-white">{t('heroTitle2', lang)}</span>
+          </motion.h1>
 
-          {/* CTA Button - Centered */}
+          {/* CTA Button */}
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.8, delay: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex justify-center mt-8"
           >
             <motion.button
               onClick={() => scrollToSection('featured')}
-              className="group relative px-8 sm:px-14 py-4 sm:py-5 overflow-hidden"
+              className="px-10 py-4 bg-accent text-primary font-semibold tracking-wider uppercase text-xs sm:text-sm hover:bg-yellow-400 transition-colors"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Button Background */}
-              <span className="absolute inset-0 bg-gradient-to-r from-accent via-yellow-400 to-accent" />
-
-              {/* Shine Animation */}
-              <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: '100%' }}
-                transition={{ duration: 0.6 }}
-              />
-
-              {/* Button Text */}
-              <span className="relative text-primary font-semibold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm">
-                {t('shopNow', lang)}
-              </span>
+              {t('shopNow', lang)}
             </motion.button>
           </motion.div>
         </div>
-
-        {/* Gold Line Decoration */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={isLoaded ? { scaleX: 1, opacity: 1 } : {}}
-          transition={{ duration: 1.2, delay: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute bottom-32 start-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent"
-        />
       </motion.div>
-
-      {/* Scroll Indicator - Fixed Position */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2, duration: 0.8 }}
-        className="absolute bottom-6 sm:bottom-8 start-1/2 -translate-x-1/2 flex flex-col items-center"
-      >
-        <motion.button
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          onClick={() => scrollToSection('featured')}
-          className="flex flex-col items-center cursor-pointer"
-        >
-          <span className="text-[10px] sm:text-xs text-gray-400 tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-3">
-            {lang === 'ar' ? 'انزل' : 'Scroll'}
-          </span>
-          <ChevronDown size={16} className="text-accent" />
-        </motion.button>
-      </motion.div>
-
-      {/* Corner Decorations with fade in */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2.2, duration: 1 }}
-        className="absolute top-6 start-6 md:top-10 md:start-10 w-12 md:w-20 h-12 md:h-20 border-s border-t border-accent/40"
-      />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2.3, duration: 1 }}
-        className="absolute top-6 end-6 md:top-10 md:end-10 w-12 md:w-20 h-12 md:h-20 border-e border-t border-accent/40"
-      />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2.4, duration: 1 }}
-        className="absolute bottom-6 start-6 md:bottom-10 md:start-10 w-12 md:w-20 h-12 md:h-20 border-s border-b border-accent/40"
-      />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-6 end-6 md:bottom-10 md:end-10 w-12 md:w-20 h-12 md:h-20 border-e border-b border-accent/40"
-      />
     </section>
   )
 }
